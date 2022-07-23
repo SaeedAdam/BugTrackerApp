@@ -12,11 +12,17 @@ public class ApplicationDbContext : IdentityDbContext<BTUser>
     {
     }
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
-    }
+    public DbSet<Company> Companies { get; set; }
+    public DbSet<Invite> Invites { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<ProjectPriority> ProjectPriorities { get; set; }
+    public DbSet<TicketAttachment> TicketAttachments { get; set; }
+    public DbSet<TicketComment> TicketComments { get; set; }
+    public DbSet<TicketHistory> TicketHistories { get; set; }
+    public DbSet<TicketPriority> TicketPriorities { get; set; }
+    public DbSet<TicketStatus> TicketStatuses { get; set; }
+    public DbSet<TicketType> TicketTypes { get; set; }
+
 }
