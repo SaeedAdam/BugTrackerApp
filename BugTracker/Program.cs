@@ -24,6 +24,7 @@ public class Program
             .AddDefaultTokenProviders();
 
         builder.Services.AddScoped<IBTRolesService, BTRolesService>();
+        builder.Services.AddScoped<IBTCompanyInfoService, BTCompanyInfoService>();
 
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
