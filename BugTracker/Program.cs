@@ -23,8 +23,12 @@ public class Program
             .AddDefaultUI()
             .AddDefaultTokenProviders();
 
+        // Custom Services
         builder.Services.AddScoped<IBTRolesService, BTRolesService>();
         builder.Services.AddScoped<IBTCompanyInfoService, BTCompanyInfoService>();
+        builder.Services.AddScoped<IBTProjectService, BTProjectService>();
+        builder.Services.AddScoped<IBTTicketService, BTTicketService>();
+        builder.Services.AddScoped<IBTTicketHistory, BTTicketHistoryService>();
 
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 

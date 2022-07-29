@@ -25,7 +25,33 @@ public class BTProjectService : IBTProjectService
 
     public async Task<bool> AddProjectManagerAsync(string userId, int projectId)
     {
-        throw new NotImplementedException();
+        BTUser currentPM = await GetProjectManagerAsync(projectId);
+
+        if (currentPM is not null)
+        {
+            try
+            {
+                await RemoveProjectManagerAsync(projectId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"*** Error *** - Error removing current PM from project.  --> Error: {e.Message}");
+                return false;
+            }
+        }
+
+        // Add the new PM
+        try
+        {
+            await AddUserToProjectAsync(userId, projectId);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"*** Error *** - Error Adding new PM.  ---> {e.Message}");
+            return false;
+        }
+
     }
 
     public async Task<bool> AddUserToProjectAsync(string userId, int projectId)
@@ -119,7 +145,19 @@ public class BTProjectService : IBTProjectService
 
     public async Task<BTUser> GetProjectManagerAsync(int projectId)
     {
-        throw new NotImplementedException();
+        Project project = await _context.Projects
+            .Include(p=>p.Members)
+            .FirstOrDefaultAsync(p=>p.Id == projectId);
+
+        foreach (BTUser member in project?.Members)
+        {
+            if (await _rolesService.IsUserInRoleAsync(member, Roles.ProjectManager.ToString()))
+            {
+                return member;
+            }
+        }
+
+        return null;
     }
 
     public async Task<List<BTUser>> GetProjectMembersByRoleAsync(int projectId, string role)
@@ -226,7 +264,24 @@ public class BTProjectService : IBTProjectService
 
     public async Task RemoveProjectManagerAsync(int projectId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Project project = await _context.Projects
+                .Include(p=>p.Members)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            foreach (BTUser member in project?.Members)
+            {
+                if (await _rolesService.IsUserInRoleAsync(member, Roles.ProjectManager.ToString()))
+                {
+                    await RemoveUserFromProjectAsync(member.Id, projectId);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"*** Error *** - Error Removing project manager from project.  ---> {e.Message}");
+        }
     }
 
     public async Task RemoveUsersFromProjectByRoleAsync(string role, int projectId)
@@ -242,9 +297,9 @@ public class BTProjectService : IBTProjectService
                 await _context.SaveChangesAsync();
             }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Console.WriteLine($"*** Error *** - Error Removing users from project.  ---> {ex.Message}");
+            Console.WriteLine($"*** Error *** - Error Removing users from project.  ---> {e.Message}");
         }
     }
 
@@ -255,20 +310,11 @@ public class BTProjectService : IBTProjectService
             BTUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             Project project = await _context.Projects.FirstOrDefaultAsync(u => u.Id == projectId);
 
-            try
+            if (await IsUserOnProjectAsync(userId, projectId))
             {
-                if (await IsUserOnProjectAsync(userId, projectId))
-                {
-                    project.Members.Remove(user);
-                    await _context.SaveChangesAsync();
-                }
+                project.Members.Remove(user);
+                await _context.SaveChangesAsync();
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            
         }
         catch (Exception ex)
         {
