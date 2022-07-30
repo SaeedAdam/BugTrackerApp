@@ -2,6 +2,7 @@
 using BugTracker.Models;
 using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Services;
 
@@ -25,6 +26,19 @@ public class BTRolesService : IBTRolesService
         return result;
     }
 
+    public async Task<List<IdentityRole>> GetRolesAsync()
+    {
+        try
+        {
+            return await _context.Roles.ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     public async Task<IEnumerable<string>> GetUserRolesAsync(BTUser user)
     {
         IEnumerable<string> result = await _userManager.GetRolesAsync(user);
@@ -46,7 +60,7 @@ public class BTRolesService : IBTRolesService
         return result;
     }
 
-    public async Task<bool> RemoveUserFromRoleAsync(BTUser user, IEnumerable<string> roles)
+    public async Task<bool> RemoveUserFromRolesAsync(BTUser user, IEnumerable<string> roles)
     {
         bool result = (await _userManager.RemoveFromRolesAsync(user, roles)).Succeeded;
 
