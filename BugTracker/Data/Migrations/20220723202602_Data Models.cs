@@ -14,21 +14,21 @@ namespace BugTracker.Data.Migrations
                 name: "AvatarFileContentType",
                 table: "AspNetUsers",
                 type: "text",
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "AvatarFileData",
                 table: "AspNetUsers",
                 type: "bytea",
-                nullable: false,
+                nullable: true,
                 defaultValue: new byte[0]);
 
             migrationBuilder.AddColumn<string>(
                 name: "AvatarFileName",
                 table: "AspNetUsers",
                 type: "text",
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<int>(
