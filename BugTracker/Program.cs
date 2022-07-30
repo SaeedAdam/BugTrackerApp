@@ -1,6 +1,7 @@
 using BugTracker.Data;
 using BugTracker.Models;
 using BugTracker.Services;
+using BugTracker.Services.Factories;
 using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -15,11 +16,14 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(DataUtility.GetConnectionString(builder.Configuration)));
+            options.UseNpgsql(DataUtility.GetConnectionString(builder.Configuration), 
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddClaimsPrincipalFactory<BTUserClaimsPrincipalFactory>()
             .AddDefaultUI()
             .AddDefaultTokenProviders();
 
@@ -72,6 +76,6 @@ public class Program
         //var dataService = app.Services.CreateScope().ServiceProvider.GetRequiredService<DataUtility>();
         await DataUtility.ManageDataAsync(app);
 
-        app.RunAsync();
+        await app.RunAsync();
     }
 }
