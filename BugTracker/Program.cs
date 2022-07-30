@@ -3,6 +3,7 @@ using BugTracker.Models;
 using BugTracker.Services;
 using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker;
@@ -13,7 +14,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+                               throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -29,6 +31,13 @@ public class Program
         builder.Services.AddScoped<IBTProjectService, BTProjectService>();
         builder.Services.AddScoped<IBTTicketService, BTTicketService>();
         builder.Services.AddScoped<IBTTicketHistory, BTTicketHistoryService>();
+        builder.Services.AddScoped<IBTNotificationService, BTNotificationService>();
+        builder.Services.AddScoped<IBTInviteService, BTInviteService>();
+        builder.Services.AddScoped<IBTFileService, BTFileService>();
+
+        // Email Service
+        builder.Services.AddScoped<IEmailSender, BTEmailService>();
+        builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 

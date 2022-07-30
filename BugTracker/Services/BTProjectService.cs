@@ -300,6 +300,7 @@ public class BTProjectService : IBTProjectService
         catch (Exception e)
         {
             Console.WriteLine($"*** Error *** - Error Removing users from project.  ---> {e.Message}");
+            throw;
         }
     }
 
@@ -319,6 +320,7 @@ public class BTProjectService : IBTProjectService
         catch (Exception ex)
         {
             Console.WriteLine($"*** Error *** - Error Removing User from project.  ---> {ex.Message}");
+            throw;
         }
     }
 
