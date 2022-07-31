@@ -28,7 +28,7 @@ public class Project
     public DateTimeOffset EndDate { get; set; }
 
     [DisplayName("Project Priority")]
-    public int ProjectPriorityId { get; set; }
+    public int? ProjectPriorityId { get; set; }
 
     [NotMapped]
     [DataType(DataType.Upload)]
