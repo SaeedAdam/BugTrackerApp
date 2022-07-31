@@ -1,5 +1,6 @@
-﻿@model BugTracker.Models.Project
-
+﻿@using TheBlogProject.Services
+@model BugTracker.Models.Project
+@inject IBTImageService ImageService
 @{
     ViewData["Title"] = "Details";
 }
@@ -44,7 +45,7 @@
             @Html.DisplayNameFor(model => model.ImageFileData)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageFileData)
+            <img class="img-fluid img-thumbnail" src="@ImageService.DecodeImage(Model.ImageFileData, Model.ImageFileContentType)"/>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ImageFileContentType)

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<BugTracker.Models.Project>
+﻿@using TheBlogProject.Services
+@model IEnumerable<BugTracker.Models.Project>
+@inject IBTImageService ImageService
 
 @{
     ViewData["Title"] = "Index";
@@ -64,7 +66,7 @@
                 @Html.DisplayFor(modelItem => item.ImageFileName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageFileData)
+                <img class="img-fluid img-thumbnail" src="@ImageService.DecodeImage(item.ImageFileData, item.ImageFileContentType)"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageFileContentType)

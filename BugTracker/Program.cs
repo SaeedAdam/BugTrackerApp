@@ -6,6 +6,7 @@ using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using TheBlogProject.Services;
 
 namespace BugTracker;
 public class Program
@@ -37,6 +38,7 @@ public class Program
         builder.Services.AddScoped<IBTInviteService, BTInviteService>();
         builder.Services.AddScoped<IBTFileService, BTFileService>();
         builder.Services.AddScoped<IBTLookupService, BTLookupService>();
+        builder.Services.AddScoped<IBTImageService, BTBasicImageService>();
 
         // Email Service
         builder.Services.AddScoped<IEmailSender, BTEmailService>();
