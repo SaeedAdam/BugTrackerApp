@@ -1,43 +1,36 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-
-namespace TheBlogProject.Services
+﻿
+public class BTBasicImageService : IBTImageService
 {
-    public class BTBasicImageService : IBTImageService
+    public async Task<byte[]> EncodeImageAsync(IFormFile file)
     {
-        public async Task<byte[]> EncodeImageAsync(IFormFile file)
-        {
-            if (file is null) return null;
+        if (file is null) return null;
 
-            using var ms = new MemoryStream();
-            await file.CopyToAsync(ms);
-            return ms.ToArray();
-        }
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        return ms.ToArray();
+    }
 
-        public async Task<byte[]> EncodeImageAsync(string fileName)
-        {
-            var file = $"{Directory.GetCurrentDirectory()}/wwwroot/assets/img/{fileName}";
+    public async Task<byte[]> EncodeImageAsync(string fileName)
+    {
+        var file = $"{Directory.GetCurrentDirectory()}/wwwroot/assets/img/{fileName}";
 
-            return await File.ReadAllBytesAsync(file);
-        }
+        return await File.ReadAllBytesAsync(file);
+    }
 
-        public string DecodeImage(byte[] data, string type)
-        {
-            if (data is null || type is null) return null;
+    public string DecodeImage(byte[] data, string type)
+    {
+        if (data is null || type is null) return null;
 
-            return $"data:image/{type};base64,{Convert.ToBase64String(data)}";
-        }
+        return $"data:image/{type};base64,{Convert.ToBase64String(data)}";
+    }
 
-        public string GetContentType(IFormFile file)
-        {
-            return file?.ContentType;
-        }
+    public string GetContentType(IFormFile file)
+    {
+        return file?.ContentType;
+    }
 
-        public int GetImageSize(IFormFile file)
-        {
-            return Convert.ToInt32(file?.Length);
-        }
+    public int GetImageSize(IFormFile file)
+    {
+        return Convert.ToInt32(file?.Length);
     }
 }

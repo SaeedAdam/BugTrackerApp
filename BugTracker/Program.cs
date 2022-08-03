@@ -6,7 +6,6 @@ using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using TheBlogProject.Services;
 
 namespace BugTracker;
 public class Program
