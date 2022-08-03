@@ -11,6 +11,7 @@ public interface IBTProjectService
     public Task<bool> AddUserToProjectAsync(string userId, int projectId);
 
     public Task ArchiveProjectAsync(Project project);
+    public Task RestoreProjectAsync(Project project);
 
     public Task<List<Project>> GetAllProjectsByCompany(int companyId);
 
@@ -27,6 +28,7 @@ public interface IBTProjectService
     public Task<List<BTUser>> GetProjectMembersByRoleAsync(int projectId, string role);
 
     public Task<Project> GetProjectByIdAsync(int projectId, int companyId);
+    public Task<Project> GetProjectByIdForAdminAsync(int projectId);
 
     public Task<List<BTUser>> GetSubmittersOnProjectAsync(int projectId);
 

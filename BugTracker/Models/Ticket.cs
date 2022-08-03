@@ -27,6 +27,9 @@ public class Ticket
     [DisplayName("Archived")]
     public bool Archived { get; set; }
 
+    [DisplayName("Archived By Project")]
+    public bool ArchivedByProject { get; set; }
+
     [DisplayName("Project")]
     public int ProjectId { get; set; }
 

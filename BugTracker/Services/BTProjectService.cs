@@ -79,9 +79,29 @@ public class BTProjectService : IBTProjectService
     public async Task ArchiveProjectAsync(Project project)
     {
         project.Archived = true;
+        await UpdateProjectAsync(project);
 
-        _context.Update(project);
-        await _context.SaveChangesAsync();
+        //Archive the tickets for the project
+        foreach (Ticket ticket in project.Tickets)
+        {
+            ticket.ArchivedByProject = true;
+            _context.Update(ticket);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task RestoreProjectAsync(Project project)
+    {
+        project.Archived = false;
+        await UpdateProjectAsync(project);
+
+        //Restore the tickets for the project
+        foreach (Ticket ticket in project.Tickets)
+        {
+            ticket.ArchivedByProject = false;
+            _context.Update(ticket);
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task<List<Project>> GetAllProjectsByCompany(int companyId)
@@ -186,6 +206,17 @@ public class BTProjectService : IBTProjectService
             .Include(p => p.Members)
             .Include(p=>p.ProjectPriority)
             .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
+
+        return project;
+    }
+
+    public async Task<Project> GetProjectByIdForAdminAsync(int projectId)
+    {
+        Project project = await _context.Projects
+            .Include(p => p.Tickets)
+            .Include(p => p.Members)
+            .Include(p => p.ProjectPriority)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
 
         return project;
     }

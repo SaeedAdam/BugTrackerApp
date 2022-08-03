@@ -29,7 +29,7 @@ public class BTUser : IdentityUser
     [DisplayName("File Extension")]
     public string AvatarFileContentType { get; set; }
 
-    public int? CompanyId { get; set; }
+    public int CompanyId { get; set; }
 
 
 

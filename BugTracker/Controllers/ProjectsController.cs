@@ -185,7 +185,16 @@ public class ProjectsController : Controller
 
         int companyId = User.Identity.GetCompanyId().Value;
 
-        var project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+        Project project = null;
+
+        if (User.IsInRole(Roles.Admin.ToString()))
+        {
+            project = await _projectService.GetProjectByIdForAdminAsync(id.Value);
+        }
+        else
+        {
+            project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+        }
 
         if (project == null)
         {
@@ -209,8 +218,48 @@ public class ProjectsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private bool ProjectExists(int id)
+
+    // GET: Projects/Restore/5
+    public async Task<IActionResult> Restore(int? id)
     {
-        return (_context.Projects?.Any(e => e.Id == id)).GetValueOrDefault();
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        int companyId = User.Identity.GetCompanyId().Value;
+
+        Project project = null;
+
+        if (User.IsInRole(Roles.Admin.ToString()))
+        {
+            project = await _projectService.GetProjectByIdForAdminAsync(id.Value);
+        }
+        else
+        {
+            project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+        }
+
+        if (project == null)
+        {
+            return NotFound();
+        }
+
+        return View(project);
     }
+
+    // POST: Projects/Restore/5
+    [HttpPost, ActionName("Restore")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RestoreConfirmed(int id)
+    {
+        int companyId = User.Identity.GetCompanyId().Value;
+
+        var project = await _projectService.GetProjectByIdAsync(id, companyId);
+
+        await _projectService.RestoreProjectAsync(project);
+
+        return RedirectToAction(nameof(Index));
+    }
+
 }
