@@ -3,6 +3,13 @@
 @inject UserManager<BTUser> UserManager
 @{ 
     BTUser btUser = await UserManager.GetUserAsync(User);
+
+    IEnumerable<string> userRoles = null;
+
+    if (btUser is not null)
+    {
+        userRoles = await UserManager.GetRolesAsync(btUser);
+    }
 }
 
 <div class="dropdown py-sm-4 ms-auto ms-sm-0 flex-shrink-1">
@@ -14,6 +21,15 @@
             <span class="d-none d-sm-inline mx-1">@btUser.FirstName</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li class="dropdown-item">Your role is: 
+                @foreach(var role in userRoles)
+                {
+                    <p class="fw-bold">@role</p>
+                }
+            </li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
             <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a></li>
             <li>
                 <hr class="dropdown-divider">

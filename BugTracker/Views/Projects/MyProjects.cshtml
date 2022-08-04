@@ -3,10 +3,10 @@
 @inject IBTImageService ImageService
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Projects";
 }
 
-<h1>Index</h1>
+<h1>My Projects</h1>
 
 @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
 {
@@ -84,20 +84,15 @@
                 @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-
-                @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @if (item.Archived)
                 {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-
-                    @if (item.Archived)
-                    {
-                        <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
-                    }
-                    else
-                    {
-                        <a asp-action="Archive" asp-route-id="@item.Id" class="">Archive</a>
-                    }
+                    <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
+                }
+                else
+                {
+                    <a asp-action="Archive" asp-route-id="@item.Id" class="">Archive</a>
                 }
             </td>
         </tr>

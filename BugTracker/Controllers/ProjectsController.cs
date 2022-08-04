@@ -8,6 +8,7 @@ using BugTracker.Models.Enums;
 using BugTracker.Models.ViewModels;
 using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BugTracker.Controllers;
 
@@ -19,14 +20,16 @@ public class ProjectsController : Controller
     private readonly IBTLookupService _lookupsService;
     private readonly IBTFileService _fileService;
     private readonly IBTProjectService _projectService;
+    private readonly UserManager<BTUser> _userManager;
 
-    public ProjectsController(ApplicationDbContext context, IBTRolesService rolesService, IBTLookupService lookupsService, IBTFileService fileService, IBTProjectService projectService)
+    public ProjectsController(ApplicationDbContext context, IBTRolesService rolesService, IBTLookupService lookupsService, IBTFileService fileService, IBTProjectService projectService, UserManager<BTUser> userManager)
     {
         _context = context;
         _rolesService = rolesService;
         _lookupsService = lookupsService;
         _fileService = fileService;
         _projectService = projectService;
+        _userManager = userManager;
     }
 
     // GET: Projects
@@ -34,6 +37,15 @@ public class ProjectsController : Controller
     {
         var applicationDbContext = _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority);
         return View(await applicationDbContext.ToListAsync());
+    }
+
+    public async Task<IActionResult> MyProjects()
+    {
+        string userId = _userManager.GetUserId(User);
+
+        var projects = await _projectService.GetUserProjectsAsync(userId);
+
+        return View(projects);
     }
 
     // GET: Projects/Details/5
