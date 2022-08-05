@@ -21,8 +21,9 @@ public class ProjectsController : Controller
     private readonly IBTFileService _fileService;
     private readonly IBTProjectService _projectService;
     private readonly UserManager<BTUser> _userManager;
+    private readonly IBTCompanyInfoService _companyInfoService;
 
-    public ProjectsController(ApplicationDbContext context, IBTRolesService rolesService, IBTLookupService lookupsService, IBTFileService fileService, IBTProjectService projectService, UserManager<BTUser> userManager)
+    public ProjectsController(ApplicationDbContext context, IBTRolesService rolesService, IBTLookupService lookupsService, IBTFileService fileService, IBTProjectService projectService, UserManager<BTUser> userManager, IBTCompanyInfoService companyInfoService)
     {
         _context = context;
         _rolesService = rolesService;
@@ -30,6 +31,7 @@ public class ProjectsController : Controller
         _fileService = fileService;
         _projectService = projectService;
         _userManager = userManager;
+        _companyInfoService = companyInfoService;
     }
 
     // GET: Projects
@@ -44,6 +46,33 @@ public class ProjectsController : Controller
         string userId = _userManager.GetUserId(User);
 
         var projects = await _projectService.GetUserProjectsAsync(userId);
+
+        return View(projects);
+    }
+
+    public async Task<IActionResult> AllProjects()
+    {
+        int companyId = User.Identity.GetCompanyId().Value;
+
+        List<Project> projects = new();
+
+        if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
+        {
+            projects = await _companyInfoService.GetAllProjectsAsync(companyId);
+        }
+        else
+        {
+            projects = await _projectService.GetAllProjectsByCompany(companyId);
+        }
+
+        return View(projects);
+    }
+
+    public async Task<IActionResult> ArchivedProjects()
+    {
+        int companyId = User.Identity.GetCompanyId().Value;
+
+        var projects = await _projectService.GetArchivedProjectsByCompany(companyId);
 
         return View(projects);
     }
