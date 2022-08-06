@@ -80,15 +80,16 @@ public class ProjectsController : Controller
     // GET: Projects/Details/5
     public async Task<IActionResult> Details(int? id)
     {
-        if (id == null || _context.Projects == null)
+        if (id == null)
         {
             return NotFound();
         }
 
-        var project = await _context.Projects
-            .Include(p => p.Company)
-            .Include(p => p.ProjectPriority)
-            .FirstOrDefaultAsync(m => m.Id == id);
+        int companyId = User.Identity.GetCompanyId().Value;
+
+
+        var project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+            
         if (project == null)
         {
             return NotFound();
@@ -303,4 +304,8 @@ public class ProjectsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    public IActionResult AssignUsers()
+    {
+        throw new NotImplementedException();
+    }
 }
