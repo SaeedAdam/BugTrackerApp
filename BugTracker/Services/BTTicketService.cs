@@ -33,12 +33,27 @@ public class BTTicketService : IBTTicketService
 
     public async Task<Ticket> GetTicketByIdAsync(int ticketId)
     {
-        return await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
+        return await _context.Tickets
+                            .Include(t => t.DeveloperUser)
+                            .Include(t => t.OwnerUser)
+                            .Include(t => t.Project)
+                            .Include(t => t.TicketPriority)
+                            .Include(t => t.TicketStatus)
+                            .Include(t => t.TicketType)
+                            .FirstOrDefaultAsync(t => t.Id == ticketId);
     }
 
     public async Task ArchiveTicketAsync(Ticket ticket)
     {
         ticket.Archived = true;
+
+        _context.Update(ticket);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task RestoreTicketAsync(Ticket ticket)
+    {
+        ticket.Archived = false;
 
         _context.Update(ticket);
         await _context.SaveChangesAsync();
@@ -264,7 +279,7 @@ public class BTTicketService : IBTTicketService
             {
                 tickets = (await _projectService.GetAllProjectsByCompany(companyId))
                     .SelectMany(p => p.Tickets)
-                    .Where(t => t.DeveloperUserId == userId)
+                    .Where(t => t.DeveloperUserId == userId || t.OwnerUserId == userId)
                     .ToList();
             }
             else if (await _rolesService.IsUserInRoleAsync(btUser, Roles.Submitter.ToString()))
