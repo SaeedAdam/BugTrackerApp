@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BugTracker.Data;
+﻿using BugTracker.Data;
 using BugTracker.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Controllers;
 
@@ -17,7 +17,7 @@ public class ProjectPrioritiesController : Controller
     // GET: ProjectPriorities
     public async Task<IActionResult> Index()
     {
-        return _context.ProjectPriorities != null ? 
+        return _context.ProjectPriorities != null ?
             View(await _context.ProjectPriorities.ToListAsync()) :
             Problem("Entity set 'ApplicationDbContext.ProjectPriorities'  is null.");
     }
@@ -145,7 +145,7 @@ public class ProjectPrioritiesController : Controller
         {
             _context.ProjectPriorities.Remove(projectPriority);
         }
-            
+
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }

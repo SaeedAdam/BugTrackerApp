@@ -42,7 +42,7 @@ public class BTRolesService : IBTRolesService
     public async Task<IEnumerable<string>> GetUserRolesAsync(BTUser user)
     {
         IEnumerable<string> result = await _userManager.GetRolesAsync(user);
-        
+
         return result;
     }
 

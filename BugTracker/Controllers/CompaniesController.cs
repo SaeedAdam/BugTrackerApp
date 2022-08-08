@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BugTracker.Data;
+﻿using BugTracker.Data;
 using BugTracker.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Controllers;
 
@@ -17,7 +17,7 @@ public class CompaniesController : Controller
     // GET: Companies
     public async Task<IActionResult> Index()
     {
-        return _context.Companies != null ? 
+        return _context.Companies != null ?
             View(await _context.Companies.ToListAsync()) :
             Problem("Entity set 'ApplicationDbContext.Companies'  is null.");
     }
@@ -145,7 +145,7 @@ public class CompaniesController : Controller
         {
             _context.Companies.Remove(company);
         }
-            
+
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }

@@ -2,16 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Authentication;
 using BugTracker.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace BugTracker.Areas.Identity.Pages.Account;
 
@@ -115,7 +115,10 @@ public class RegisterModel : PageModel
         {
             var user = new BTUser
             {
-                UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName
+                UserName = Input.Email,
+                Email = Input.Email,
+                FirstName = Input.FirstName,
+                LastName = Input.LastName
             };
 
             await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

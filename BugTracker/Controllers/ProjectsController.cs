@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BugTracker.Data;
+﻿using BugTracker.Data;
 using BugTracker.Extensions;
 using BugTracker.Models;
 using BugTracker.Models.Enums;
@@ -9,6 +6,9 @@ using BugTracker.Models.ViewModels;
 using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Controllers;
 
@@ -89,7 +89,7 @@ public class ProjectsController : Controller
 
 
         var project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
-            
+
         if (project == null)
         {
             return NotFound();

@@ -40,6 +40,9 @@ public class BTTicketService : IBTTicketService
                             .Include(t => t.TicketPriority)
                             .Include(t => t.TicketStatus)
                             .Include(t => t.TicketType)
+                            .Include(t => t.Comments)
+                            .Include(t => t.Attachments)
+                            .Include(t => t.History)
                             .FirstOrDefaultAsync(t => t.Id == ticketId);
     }
 
@@ -59,6 +62,51 @@ public class BTTicketService : IBTTicketService
         await _context.SaveChangesAsync();
     }
 
+    public async Task AddTicketCommentAsync(TicketComment ticketComment)
+    {
+        try
+        {
+            await _context.AddAsync(ticketComment);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task AddTicketAttachmentAsync(TicketAttachment ticketAttachment)
+    {
+        try
+        {
+            await _context.AddAsync(ticketAttachment);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task<TicketAttachment> GetTicketAttachmentByIdAsync(int ticketAttachmentId)
+    {
+        try
+        {
+            TicketAttachment ticketAttachment = await _context.TicketAttachments
+                                                                .Include(t => t.User)
+                                                                .FirstOrDefaultAsync(t => t.Id == ticketAttachmentId);
+
+            return ticketAttachment;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     public async Task AssignTicketAsync(int ticketId, string userId)
     {
         Ticket ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
@@ -66,7 +114,7 @@ public class BTTicketService : IBTTicketService
         if (ticket is not null)
         {
             ticket.DeveloperUserId = userId;
-            
+
             //TODO: Revisit this code when assigning data
             ticket.TicketStatusId = (await LookupTicketStatusIdAsync("Development")).Value;
             await _context.SaveChangesAsync();
@@ -96,8 +144,8 @@ public class BTTicketService : IBTTicketService
         {
             List<Ticket> tickets = await _context.Projects
                 .Where(p => p.CompanyId == companyId)
-                .SelectMany(p=>p.Tickets)
-                    .Include(t=>t.Attachments)
+                .SelectMany(p => p.Tickets)
+                    .Include(t => t.Attachments)
                     .Include(t => t.Comments)
                     .Include(t => t.DeveloperUser)
                     .Include(t => t.History)
@@ -207,7 +255,7 @@ public class BTTicketService : IBTTicketService
         }
     }
 
-    
+
 
     public async Task<BTUser> GetTicketDeveloperAsync(int ticketId, int companyId)
     {
@@ -242,7 +290,7 @@ public class BTTicketService : IBTTicketService
             }
             else if (role == Roles.Developer.ToString())
             {
-                tickets = (await GetAllTicketsByCompanyAsync(companyId)).Where(t=>t.DeveloperUserId == userId).ToList();
+                tickets = (await GetAllTicketsByCompanyAsync(companyId)).Where(t => t.DeveloperUserId == userId).ToList();
             }
             else if (role == Roles.Submitter.ToString())
             {

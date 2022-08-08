@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 namespace BugTracker.Services.Interfaces;
 
 public interface IBTRolesService
-{ 
+{
     Task<bool> IsUserInRoleAsync(BTUser user, string roleName);
     Task<List<IdentityRole>> GetRolesAsync();
     Task<IEnumerable<string>> GetUserRolesAsync(BTUser user);

@@ -1,12 +1,10 @@
-﻿using BugTracker.Data;
-using BugTracker.Services.Interfaces;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+﻿using BugTracker.Services.Interfaces;
 
 namespace BugTracker.Services;
 
 public class BTFileService : IBTFileService
 {
-    private readonly string[] suffixes = {"Bytes", "KB", "MB", "GB", "TB", "PB"};
+    private readonly string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
 
     public async Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file)
     {
@@ -53,7 +51,7 @@ public class BTFileService : IBTFileService
         if (!string.IsNullOrWhiteSpace(file))
         {
             fileImage = Path.GetExtension(file).Replace(".", "");
-            return $"/img/png/{fileImage}.png";
+            return $"/img/contenttype/{fileImage}.png";
         }
 
         return fileImage;

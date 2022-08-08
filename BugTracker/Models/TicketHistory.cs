@@ -11,10 +11,10 @@ public class TicketHistory
 
     [DisplayName("Updated Item")]
     public string Property { get; set; }
-    
+
     [DisplayName("Previous")]
     public string OldValue { get; set; }
-    
+
     [DisplayName("Current")]
     public string NewValue { get; set; }
 
@@ -31,5 +31,5 @@ public class TicketHistory
 
     //Navigation properties
     public virtual Ticket Ticket { get; set; }
-    public  virtual BTUser User { get; set; }
+    public virtual BTUser User { get; set; }
 }

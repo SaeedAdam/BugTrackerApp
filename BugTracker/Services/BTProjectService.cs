@@ -56,11 +56,11 @@ public class BTProjectService : IBTProjectService
 
     public async Task<bool> AddUserToProjectAsync(string userId, int projectId)
     {
-        BTUser user = await _context.Users.FirstOrDefaultAsync(u=>u.Id == userId);
+        BTUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user != null)
         {
-            Project project = await _context.Projects.FirstOrDefaultAsync(u=>u.Id == projectId);
+            Project project = await _context.Projects.FirstOrDefaultAsync(u => u.Id == projectId);
 
             if (!await IsUserOnProjectAsync(userId, projectId))
             {
@@ -185,8 +185,8 @@ public class BTProjectService : IBTProjectService
     public async Task<BTUser> GetProjectManagerAsync(int projectId)
     {
         Project project = await _context.Projects
-            .Include(p=>p.Members)
-            .FirstOrDefaultAsync(p=>p.Id == projectId);
+            .Include(p => p.Members)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
 
         foreach (BTUser member in project?.Members)
         {
@@ -222,7 +222,7 @@ public class BTProjectService : IBTProjectService
     {
         Project project = await _context.Projects
                                         .Include(p => p.Tickets)
-                                            .ThenInclude(t=>t.TicketPriority)
+                                            .ThenInclude(t => t.TicketPriority)
                                         .Include(p => p.Tickets)
                                             .ThenInclude(t => t.TicketStatus)
                                         .Include(p => p.Tickets)
@@ -232,7 +232,7 @@ public class BTProjectService : IBTProjectService
                                         .Include(p => p.Tickets)
                                             .ThenInclude(t => t.OwnerUser)
                                         .Include(p => p.Members)
-                                        .Include(p=>p.ProjectPriority)
+                                        .Include(p => p.ProjectPriority)
                                         .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
         return project;
@@ -258,7 +258,7 @@ public class BTProjectService : IBTProjectService
     {
         List<BTUser> users = await _context.Users.Where(u => u.Projects.All(p => p.Id != projectId)).ToListAsync();
 
-        return users.Where(u=>u.CompanyId == companyId).ToList();
+        return users.Where(u => u.CompanyId == companyId).ToList();
     }
 
     public async Task<List<Project>> GetUserProjectsAsync(string userId)
@@ -301,7 +301,7 @@ public class BTProjectService : IBTProjectService
     public async Task<bool> IsUserOnProjectAsync(string userId, int projectId)
     {
         Project project = await _context.Projects
-            .Include(p=>p.Members).
+            .Include(p => p.Members).
             FirstOrDefaultAsync(p => p.Id == projectId);
 
         bool result = false;
@@ -312,6 +312,26 @@ public class BTProjectService : IBTProjectService
         }
 
         return result;
+    }
+
+    public async Task<bool> IsAssignedProjectManagerAsync(string userId, int projectId)
+    {
+        try
+        {
+            string projectManagerId = (await GetProjectManagerAsync(projectId))?.Id;
+
+            if (projectManagerId == userId)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task<int> LookupProjectPriorityId(string priorityName)
@@ -326,7 +346,7 @@ public class BTProjectService : IBTProjectService
         try
         {
             Project project = await _context.Projects
-                .Include(p=>p.Members)
+                .Include(p => p.Members)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
 
             foreach (BTUser member in project?.Members)

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BugTracker.Data;
+﻿using BugTracker.Data;
 using BugTracker.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Controllers;
 
@@ -17,7 +17,7 @@ public class TicketTypesController : Controller
     // GET: TicketTypes
     public async Task<IActionResult> Index()
     {
-        return _context.TicketTypes != null ? 
+        return _context.TicketTypes != null ?
             View(await _context.TicketTypes.ToListAsync()) :
             Problem("Entity set 'ApplicationDbContext.TicketTypes'  is null.");
     }
@@ -145,7 +145,7 @@ public class TicketTypesController : Controller
         {
             _context.TicketTypes.Remove(ticketType);
         }
-            
+
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }

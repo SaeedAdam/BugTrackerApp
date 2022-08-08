@@ -27,7 +27,7 @@ public class BTInviteService : IBTInviteService
         {
             invite.IsValid = false;
             invite.InviteeId = userId;
-            
+
             await _context.SaveChangesAsync();
 
             return true;
@@ -58,7 +58,7 @@ public class BTInviteService : IBTInviteService
         try
         {
             return await _context.Invites.Where(i => i.CompanyId == companyId)
-                                        .AnyAsync(i=>i.CompanyToken == token && i.InviteeEmail == email);
+                                        .AnyAsync(i => i.CompanyToken == token && i.InviteeEmail == email);
         }
         catch (Exception e)
         {
@@ -71,10 +71,10 @@ public class BTInviteService : IBTInviteService
     {
         try
         {
-            Invite invite = await _context.Invites.Where(i=>i.CompanyId == companyId)
-                    .Include(i=>i.Company)
-                    .Include(i=>i.Project)
-                    .Include(i=>i.Invitor)
+            Invite invite = await _context.Invites.Where(i => i.CompanyId == companyId)
+                    .Include(i => i.Company)
+                    .Include(i => i.Project)
+                    .Include(i => i.Invitor)
                     .FirstOrDefaultAsync(i => i.Id == inviteId);
 
             return invite;

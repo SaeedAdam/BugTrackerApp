@@ -152,13 +152,13 @@ public class BTTicketHistoryService : IBTTicketHistory
 
     public async Task<List<TicketHistory>> GetProjectTicketsHistoriesAsync(int projectId, int companyId)
     {
-        Project project = await _context.Projects.Where(p=>p.CompanyId == companyId)
-                                                .Include(p=>p.Tickets)
-                                                .ThenInclude(t=>t.History)
-                                                .ThenInclude(h=>h.User)
+        Project project = await _context.Projects.Where(p => p.CompanyId == companyId)
+                                                .Include(p => p.Tickets)
+                                                .ThenInclude(t => t.History)
+                                                .ThenInclude(h => h.User)
                                                 .FirstOrDefaultAsync(p => p.Id == projectId);
 
-        List<TicketHistory> ticketHistory = project.Tickets.SelectMany(t=>t.History).ToList();
+        List<TicketHistory> ticketHistory = project.Tickets.SelectMany(t => t.History).ToList();
 
         return ticketHistory;
     }
@@ -166,11 +166,11 @@ public class BTTicketHistoryService : IBTTicketHistory
     public async Task<List<TicketHistory>> GetCompanyTicketsHistoriesAsync(int companyId)
     {
         List<Project> projects = (await _context.Companies
-                                                .Include(c=>c.Projects)
-                                                    .ThenInclude(p=>p.Tickets)
-                                                        .ThenInclude(t=>t.History)
-                                                            .ThenInclude(h=>h.User)
-                                                .FirstOrDefaultAsync(c=>c.Id == companyId)).Projects.ToList();
+                                                .Include(c => c.Projects)
+                                                    .ThenInclude(p => p.Tickets)
+                                                        .ThenInclude(t => t.History)
+                                                            .ThenInclude(h => h.User)
+                                                .FirstOrDefaultAsync(c => c.Id == companyId)).Projects.ToList();
 
         List<Ticket> tickets = projects.SelectMany(p => p.Tickets).ToList();
 

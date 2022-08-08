@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BugTracker.Data;
+using BugTracker.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using BugTracker.Data;
-using BugTracker.Models;
 
 namespace BugTracker.Controllers;
 
@@ -169,7 +169,7 @@ public class InvitesController : Controller
         {
             _context.Invites.Remove(invite);
         }
-            
+
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }

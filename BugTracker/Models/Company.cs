@@ -9,7 +9,7 @@ public class Company
     [DisplayName("Company Name")]
     public string Name { get; set; }
 
-    [DisplayName("Company Description")] 
+    [DisplayName("Company Description")]
     public string Description { get; set; }
 
 
