@@ -19,6 +19,24 @@
 
 <h1>Ticket Details</h1>
 
+@if (!string.IsNullOrEmpty(Model.DeveloperUserId))
+{
+	<a href="javascript:void(0)">
+		@if (Model.DeveloperUser?.AvatarFileData is not null)
+		{
+			<img class="media rounded-circle" src="@ImageService.DecodeImage(btUser.AvatarFileData, btUser.AvatarFileContentType)"/>
+		}
+		else
+		{
+			<img class="media rounded-circle" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" style="width: 30px; height: 30px"/>
+		}
+	</a>
+	<span class="text-muted" style="font-size: small">
+		Developer: <strong>@Model.DeveloperUser.FullName</strong>
+	</span>
+
+}
+
 <div>
 	<div class="container-fluid">
 		<div class="row gy-2">

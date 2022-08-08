@@ -397,6 +397,15 @@ public class BTTicketService : IBTTicketService
         return tickets;
     }
 
+    public async Task<List<Ticket>> GetUnassignedTicketsAsync(int companyId)
+    {
+        List<Ticket> tickets = (await GetAllTicketsByCompanyAsync(companyId))
+            .Where(t => string.IsNullOrEmpty(t.DeveloperUserId))
+            .ToList();
+
+        return tickets;
+    }
+
     public async Task<int?> LookupTicketPriorityIdAsync(string priorityName)
     {
         int priorityId = (await _context.TicketPriorities.FirstOrDefaultAsync(tp => tp.Name == priorityName)).Id;

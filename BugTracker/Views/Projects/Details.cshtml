@@ -69,7 +69,6 @@
                             <hr />
                         </div>
                         <div class="body" style="overflow-y:auto;height:300px;">
-                            @* if() logic for Avatar/Default etc *@
                             @if (projectManager is not null)
                             {
                                 <div>
@@ -121,8 +120,8 @@
                                 @* Logic for avatars *@
                                 @foreach (BTUser member in await ProjectService.GetAllProjectMembersExceptPMAsync(Model.Id))
                                 {
-                                    <li class="">
-                                        <a href="">
+                                    <li class="">   
+                                        <a href="javascript:void(0)" class="text-decoration-none text-muted">
                                             <div class="media">
                                                 @if (member.AvatarFileData is not null)
                                                 {
@@ -134,7 +133,7 @@
                                                 }
                                                 <div class="">
                                                     <span class="">@member.FullName</span>
-                                                    <span class="">@((await UserManager.GetRolesAsync(member)))</span>
+                                                    <span class="" style="font-size:small">[@((await UserManager.GetRolesAsync(member)).First())]</span>
                                                 </div>
                                             </div>
                                         </a>
@@ -158,7 +157,7 @@
                             @foreach (TicketHistory history in await HistoryService.GetProjectTicketsHistoriesAsync(Model.Id, btUser.CompanyId))
                             {
                                 <div class="">
-                                    <span class="date">@history.Created.ToString("dd/MM/yyyyy")</span>
+                                    <span class="date">@history.Created.ToString("dd/MM/yyyy")</span>
                                     <h6>@history.Description</h6>
                                     <span>By: <a href="" title="@history.User.FullName">@history.User.FullName</a></span>
                                     <div class="">
@@ -208,7 +207,7 @@
                                                 {
                                                     if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
                                                     {
-                                                        <a class="btn btn-xs btn-info" asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-ticketId="@ticket.Id">Assign Dev</a>
+                                                        <a class="btn btn-sm btn-info" asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-ticketId="@ticket.Id">Assign Dev</a>
                                                     }
 
                                                 }
@@ -223,7 +222,7 @@
                                                 <td><span class="">@ticket.TicketStatus.Name </span></td>
                                             }
                                             <td><span class="">@ticket.TicketPriority.Name </span></td>
-                                            <td>@ticket.Created.ToString("dd/MM/yyyyy")</td>
+                                            <td>@ticket.Created.ToString("dd/MM/yyyy")</td>
                                             <td>
                                                 <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id"><i class="fs-5 bi-justify"></i></a>
                                                 @if (ticket.DeveloperUserId == btUser.Id || ticket.OwnerUserId == btUser.Id || (projectManager?.Id == btUser.Id) || User.IsInRole(nameof(Roles.Admin)))
