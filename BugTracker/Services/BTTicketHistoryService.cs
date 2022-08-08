@@ -25,7 +25,7 @@ public class BTTicketHistoryService : IBTTicketHistory
                 Property = "",
                 OldValue = "",
                 NewValue = "",
-                Created = DateTimeOffset.Now,
+                Created = DateTimeOffset.Now.ToUniversalTime(),
                 UserId = userId,
                 Description = "New Ticket Created"
             };
@@ -52,7 +52,7 @@ public class BTTicketHistoryService : IBTTicketHistory
                     Property = "Title",
                     OldValue = oldTicket.Title,
                     NewValue = newTicket.Title,
-                    Created = DateTimeOffset.Now,
+                    Created = DateTimeOffset.Now.ToUniversalTime(),
                     UserId = userId,
                     Description = $"New Ticket Title: {newTicket.Title}"
                 };
@@ -69,7 +69,7 @@ public class BTTicketHistoryService : IBTTicketHistory
                     Property = "Description",
                     OldValue = oldTicket.Description,
                     NewValue = newTicket.Description,
-                    Created = DateTimeOffset.Now,
+                    Created = DateTimeOffset.Now.ToUniversalTime(),
                     UserId = userId,
                     Description = $"New Ticket Description: {newTicket.Description}"
                 };
@@ -86,9 +86,9 @@ public class BTTicketHistoryService : IBTTicketHistory
                     Property = "TicketPriority",
                     OldValue = oldTicket.TicketPriority.Name,
                     NewValue = newTicket.TicketPriority.Name,
-                    Created = DateTimeOffset.Now,
+                    Created = DateTimeOffset.Now.ToUniversalTime(),
                     UserId = userId,
-                    Description = $"New Ticket Priority: {newTicket.TicketPriority}"
+                    Description = $"New Ticket Priority: {newTicket.TicketPriority.Name}"
                 };
 
                 await _context.TicketHistories.AddAsync(history);
@@ -103,9 +103,9 @@ public class BTTicketHistoryService : IBTTicketHistory
                     Property = "TicketStatus",
                     OldValue = oldTicket.TicketStatus.Name,
                     NewValue = newTicket.TicketStatus.Name,
-                    Created = DateTimeOffset.Now,
+                    Created = DateTimeOffset.Now.ToUniversalTime(),
                     UserId = userId,
-                    Description = $"New Ticket Status: {newTicket.TicketStatus}"
+                    Description = $"New Ticket Status: {newTicket.TicketStatus.Name}"
                 };
 
                 await _context.TicketHistories.AddAsync(history);
@@ -120,9 +120,9 @@ public class BTTicketHistoryService : IBTTicketHistory
                     Property = "TicketType",
                     OldValue = oldTicket.TicketType.Name,
                     NewValue = newTicket.TicketType.Name,
-                    Created = DateTimeOffset.Now,
+                    Created = DateTimeOffset.Now.ToUniversalTime(),
                     UserId = userId,
-                    Description = $"New Ticket Type: {newTicket.TicketType}"
+                    Description = $"New Ticket Type: {newTicket.TicketType.Name}"
                 };
 
                 await _context.TicketHistories.AddAsync(history);
@@ -137,7 +137,7 @@ public class BTTicketHistoryService : IBTTicketHistory
                     Property = "Developer",
                     OldValue = oldTicket.DeveloperUser?.FullName ?? "Not Assigned",
                     NewValue = newTicket.DeveloperUser?.FullName,
-                    Created = DateTimeOffset.Now,
+                    Created = DateTimeOffset.Now.ToUniversalTime(),
                     UserId = userId,
                     Description = $"New Ticket Developer: {newTicket.DeveloperUser.FullName}"
                 };
@@ -147,6 +147,34 @@ public class BTTicketHistoryService : IBTTicketHistory
 
             // Save the TicketHistories DbSet to the database
             await _context.SaveChangesAsync();
+        }
+    }
+    public async Task AddHistoryAsync(int ticketId, string model, string userId)
+    {
+        try
+        {
+            Ticket ticket = await _context.Tickets.FindAsync(ticketId);
+            string description = model.ToLower().Replace("ticket", "");
+            description = $"New {description} added to ticket: {ticket.Title}";
+
+            TicketHistory history = new()
+            {
+                TicketId = ticket.Id,
+                Property = model,
+                OldValue = "",
+                NewValue = "",
+                Created = DateTimeOffset.Now.ToUniversalTime(),
+                UserId = userId,
+                Description = description
+            };
+
+            await _context.TicketHistories.AddAsync(history);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 

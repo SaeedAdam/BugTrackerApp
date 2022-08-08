@@ -107,6 +107,27 @@ public class BTTicketService : IBTTicketService
         }
     }
 
+    public async Task<Ticket> GetTicketAsNoTrackingAsync(int ticketId)
+    {
+        try
+        {
+            return await _context.Tickets
+                                .Include(t => t.DeveloperUser)
+                                .Include(t => t.Project)
+                                .Include(t => t.TicketPriority)
+                                .Include(t => t.TicketStatus)
+                                .Include(t => t.TicketType)
+                                .Include(t => t.Attachments)
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync(t => t.Id == ticketId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     public async Task AssignTicketAsync(int ticketId, string userId)
     {
         Ticket ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);

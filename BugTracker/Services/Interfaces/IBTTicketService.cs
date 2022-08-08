@@ -14,6 +14,7 @@ public interface IBTTicketService
     public Task AddTicketCommentAsync(TicketComment ticketComment);
     public Task AddTicketAttachmentAsync(TicketAttachment ticketAttachment);
     public Task<TicketAttachment> GetTicketAttachmentByIdAsync(int ticketAttachmentId);
+    public Task<Ticket> GetTicketAsNoTrackingAsync(int ticketId);
     public Task AssignTicketAsync(int ticketId, string userId);
     public Task<List<Ticket>> GetArchivedTicketsAsync(int companyId);
     public Task<List<Ticket>> GetAllTicketsByCompanyAsync(int companyId);
