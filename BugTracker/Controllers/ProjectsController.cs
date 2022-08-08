@@ -77,6 +77,97 @@ public class ProjectsController : Controller
         return View(projects);
     }
 
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UnassignedProjects()
+    {
+        int companyId = User.Identity.GetCompanyId().Value;
+
+        List<Project> projects = await _projectService.GetUnassignedProjects(companyId);
+
+        return View(projects);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet]
+    public async Task<IActionResult> AssignPM(int id)
+    {
+        int companyId = User.Identity.GetCompanyId().Value;
+
+        AssignPMViewModel model = new();
+
+        model.Project = await _projectService.GetProjectByIdAsync(id, companyId);
+        model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(Roles.ProjectManager), companyId), "Id", "FullName");
+
+        return View(model);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AssignPM(AssignPMViewModel model)
+    {
+        if (!string.IsNullOrEmpty(model.PMID))
+        {
+            await _projectService.AddProjectManagerAsync(model.PMID, model.Project.Id);
+
+            return RedirectToAction(nameof(Details), new {id = model.Project.Id});
+        }
+
+        return RedirectToAction(nameof(AssignPM), new {projectId = model.Project.Id});
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> AssignMembers(int id)
+    {
+        ProjectsMemberViewModel model = new();
+
+        int companyId = User.Identity.GetCompanyId().Value;
+
+        model.Project = await _projectService.GetProjectByIdAsync(id, companyId);
+
+        List<BTUser> developers = await _rolesService.GetUsersInRoleAsync(nameof(Roles.Developer), companyId);
+        List<BTUser> submitters = await _rolesService.GetUsersInRoleAsync(nameof(Roles.Submitter), companyId);
+
+        List<BTUser> companyMembers = developers.Concat(submitters).ToList();
+
+        List<string> projectsMembers = model.Project.Members.Select(m=>m.Id).ToList();
+
+
+        model.Users = new MultiSelectList(companyMembers, "Id", "FullName", projectsMembers);
+
+        return View(model);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AssignMembers(ProjectsMemberViewModel model)
+    {
+        if (model.SelectedUsers is not null)
+        {
+            List<string> membersId = (await _projectService.GetAllProjectMembersExceptPMAsync(model.Project.Id))
+                .Select(m => m.Id).ToList();
+
+
+            // Remove current members
+            foreach (string member in membersId)
+            {
+                await _projectService.RemoveUserFromProjectAsync(member, model.Project.Id);
+            }
+
+            // Add new members
+            foreach (var member in model.SelectedUsers)
+            {
+                await _projectService.AddUserToProjectAsync(member, model.Project.Id);
+            }
+
+            return RedirectToAction(nameof(Details), new { id = model.Project.Id });
+        }
+
+        return RedirectToAction(nameof(AssignMembers), new { projectId = model.Project.Id });
+    }
+    
+
     // GET: Projects/Details/5
     public async Task<IActionResult> Details(int? id)
     {
@@ -304,8 +395,4 @@ public class ProjectsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public IActionResult AssignUsers()
-    {
-        throw new NotImplementedException();
-    }
 }

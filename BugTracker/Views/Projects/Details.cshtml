@@ -86,7 +86,7 @@
                                         <p class="text-muted mb-0">Project Manager</p>
                                         @if (User.IsInRole(nameof(Roles.Admin)) || (btUser.Id == projectManager.Id))
                                         {
-                                            <a class="btn btn-sm btn-outline-primary" style="font-size: small" asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Users</a>
+                                            <a class="btn btn-sm btn-outline-primary" style="font-size: small" asp-action="AssignMembers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Team</a>
                                         }
                                     </div>
                                 </div>
@@ -99,7 +99,7 @@
                                         <h5 class="text-muted mb-0">Not Assigned</h5>
                                     @if (User.IsInRole(nameof(Roles.Admin)))
                                         {
-                                            <span><a asp-action="AssignProjectManager" asp-controller="Home" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Assign PM</a></span>
+                                            <span><a asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Assign PM</a></span>
                                         }
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@
                                                 {
                                                     if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
                                                     {
-                                                        <a class="btn btn-sm btn-info" asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-ticketId="@ticket.Id">Assign Dev</a>
+                                                        <a class="btn btn-sm btn-info" asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-id="@ticket.Id">Assign Dev</a>
                                                     }
 
                                                 }

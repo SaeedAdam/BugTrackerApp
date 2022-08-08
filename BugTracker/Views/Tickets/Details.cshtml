@@ -47,7 +47,9 @@
 							<h5>@Model.Title</h5>
 							<p>@Model.Description</p>
 							<div class="progress-container progress-info m-b-25">
-								<span class="progress-badge" style="font-size:small">Project: @Model.Project.Name</span>
+								<a class="text-muted text-decoration-none" asp-action="Details" asp-controller="Projects" asp-route-Id="@Model.Project.Id">
+									<span class="progress-badge" style="font-size:small">Project: <strong>@Model.Project.Name</strong></span>
+								</a>
 								<div class="progress">
 									@{
 										var start = Model.Project.StartDate.DateTime;

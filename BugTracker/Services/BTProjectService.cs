@@ -104,6 +104,26 @@ public class BTProjectService : IBTProjectService
         }
     }
 
+    public async Task<List<Project>> GetUnassignedProjects(int companyId)
+    {
+        List<Project> result = new();
+
+        List<Project> projects = await _context.Projects
+            .Include(p => p.ProjectPriority)
+            .Where(p => p.CompanyId == companyId)
+            .ToListAsync();
+
+        foreach (Project project in projects)
+        {
+            if ((await GetProjectMembersByRoleAsync(project.Id, nameof(Roles.ProjectManager))).Count == 0)
+            {
+                result.Add(project);
+            }
+        }
+
+        return result;
+    }
+
     public async Task<List<Project>> GetAllProjectsByCompany(int companyId)
     {
         List<Project> projects = new();

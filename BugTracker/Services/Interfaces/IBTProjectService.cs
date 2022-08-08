@@ -12,6 +12,7 @@ public interface IBTProjectService
 
     public Task ArchiveProjectAsync(Project project);
     public Task RestoreProjectAsync(Project project);
+    public Task<List<Project>> GetUnassignedProjects(int companyId);
 
     public Task<List<Project>> GetAllProjectsByCompany(int companyId);
 
