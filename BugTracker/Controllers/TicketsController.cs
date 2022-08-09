@@ -63,7 +63,7 @@ public class TicketsController : Controller
         return View(tickets);
     }
 
-    [Authorize(Roles = "Admin,ProjectManager")]
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> UnassignedTickets()
     {
         int companyId = User.Identity.GetCompanyId().Value;
@@ -92,7 +92,7 @@ public class TicketsController : Controller
         }
     }
 
-
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpGet]
     public async Task<IActionResult> AssignDeveloper(int id)
     {
@@ -107,7 +107,7 @@ public class TicketsController : Controller
 
     }
 
-
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AssignDeveloper(AssignDeveloperViewModel model)
@@ -387,6 +387,7 @@ public class TicketsController : Controller
 
 
     // GET: Tickets/Archive/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Archive(int? id)
     {
         if (id == null)
@@ -405,6 +406,7 @@ public class TicketsController : Controller
     }
 
     // POST: Tickets/Archive/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpPost, ActionName("Archive")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ArchiveConfirmed(int id)
@@ -417,6 +419,7 @@ public class TicketsController : Controller
     }
 
     // GET: Tickets/Restore/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Restore(int? id)
     {
         if (id == null)
@@ -435,6 +438,7 @@ public class TicketsController : Controller
     }
 
     // POST: Tickets/Restore/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpPost, ActionName("Restore")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RestoreConfirmed(int id)

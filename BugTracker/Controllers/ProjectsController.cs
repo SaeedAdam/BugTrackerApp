@@ -58,7 +58,6 @@ public class ProjectsController : Controller
 
         return View(projects);
     }
-
     public async Task<IActionResult> ArchivedProjects()
     {
         int companyId = User.Identity.GetCompanyId().Value;
@@ -68,7 +67,7 @@ public class ProjectsController : Controller
         return View(projects);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(Roles.Admin))]
     public async Task<IActionResult> UnassignedProjects()
     {
         int companyId = User.Identity.GetCompanyId().Value;
@@ -78,7 +77,7 @@ public class ProjectsController : Controller
         return View(projects);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(Roles.Admin))]
     [HttpGet]
     public async Task<IActionResult> AssignPM(int id)
     {
@@ -92,7 +91,7 @@ public class ProjectsController : Controller
         return View(model);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(Roles.Admin))]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AssignPM(AssignPMViewModel model)
@@ -107,6 +106,7 @@ public class ProjectsController : Controller
         return RedirectToAction(nameof(AssignPM), new {projectId = model.Project.Id});
     }
 
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpGet]
     public async Task<IActionResult> AssignMembers(int id)
     {
@@ -129,7 +129,7 @@ public class ProjectsController : Controller
         return View(model);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AssignMembers(ProjectsMemberViewModel model)
@@ -181,6 +181,7 @@ public class ProjectsController : Controller
     }
 
     // GET: Projects/Create
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Create()
     {
         int companyId = User.Identity.GetCompanyId().Value;
@@ -200,6 +201,7 @@ public class ProjectsController : Controller
     // POST: Projects/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(AddProjectWithPMViewModel model)
@@ -242,6 +244,7 @@ public class ProjectsController : Controller
     }
 
     // GET: Projects/Edit/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Edit(int? id)
     {
         int companyId = User.Identity.GetCompanyId().Value;
@@ -261,6 +264,7 @@ public class ProjectsController : Controller
     // POST: Projects/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(AddProjectWithPMViewModel model)
@@ -306,6 +310,7 @@ public class ProjectsController : Controller
     }
 
     // GET: Projects/Archive/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Archive(int? id)
     {
         if (id == null)
@@ -335,6 +340,7 @@ public class ProjectsController : Controller
     }
 
     // POST: Projects/Archive/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpPost, ActionName("Archive")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ArchiveConfirmed(int id)
@@ -350,6 +356,7 @@ public class ProjectsController : Controller
 
 
     // GET: Projects/Restore/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Restore(int? id)
     {
         if (id == null)
@@ -379,6 +386,7 @@ public class ProjectsController : Controller
     }
 
     // POST: Projects/Restore/5
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     [HttpPost, ActionName("Restore")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RestoreConfirmed(int id)
@@ -392,7 +400,7 @@ public class ProjectsController : Controller
         return RedirectToAction(nameof(MyProjects));
     }
 
-    public async Task<bool> ProjectExists(int id)
+    private async Task<bool> ProjectExists(int id)
     {
         int companyId = User.Identity.GetCompanyId().Value;
 
