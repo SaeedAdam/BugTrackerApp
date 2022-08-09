@@ -1,5 +1,4 @@
-﻿using BugTracker.Data;
-using BugTracker.Extensions;
+﻿using BugTracker.Extensions;
 using BugTracker.Models;
 using BugTracker.Models.Enums;
 using BugTracker.Models.ViewModels;
@@ -15,7 +14,6 @@ namespace BugTracker.Controllers;
 [Authorize]
 public class TicketsController : Controller
 {
-    private readonly ApplicationDbContext _context;
     private readonly UserManager<BTUser> _userManager;
     private readonly IBTProjectService _projectService;
     private readonly IBTLookupService _lookupService;
@@ -23,22 +21,14 @@ public class TicketsController : Controller
     private readonly IBTFileService _fileService;
     private readonly IBTTicketHistory _historyService;
 
-    public TicketsController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTProjectService btProjectService, IBTLookupService lookupService, IBTTicketService ticketService, IBTFileService fileService, IBTTicketHistory historyService)
+    public TicketsController(UserManager<BTUser> userManager, IBTProjectService btProjectService, IBTLookupService lookupService, IBTTicketService ticketService, IBTFileService fileService, IBTTicketHistory historyService)
     {
-        _context = context;
         _userManager = userManager;
         _projectService = btProjectService;
         _lookupService = lookupService;
         _ticketService = ticketService;
         _fileService = fileService;
         _historyService = historyService;
-    }
-
-    // GET: Tickets
-    public async Task<IActionResult> Index()
-    {
-        var applicationDbContext = _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-        return View(await applicationDbContext.ToListAsync());
     }
 
     public async Task<IActionResult> MyTickets()
@@ -224,7 +214,7 @@ public class TicketsController : Controller
                 Console.WriteLine(e);
                 throw;
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyTickets));
         }
 
 
@@ -305,7 +295,7 @@ public class TicketsController : Controller
 
             //TODO: Ticket Notification
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyTickets));
         }
 
         ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetTicketPrioritiesAsync(), "Id", "Name", ticket.TicketPriorityId);
@@ -349,7 +339,7 @@ public class TicketsController : Controller
     {
         string statusMessage;
 
-        if (ModelState.IsValid && ticketAttachment.FormFile != null)
+        if (ModelState.IsValid && ticketAttachment.FormFile is not null)
         {
             try
             {
@@ -423,7 +413,7 @@ public class TicketsController : Controller
 
         await _ticketService.ArchiveTicketAsync(ticket);
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(MyTickets));
     }
 
     // GET: Tickets/Restore/5
@@ -453,7 +443,7 @@ public class TicketsController : Controller
 
         await _ticketService.RestoreTicketAsync(ticket);
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(MyTickets));
     }
 
     private async Task<bool> TicketExists(int id)
