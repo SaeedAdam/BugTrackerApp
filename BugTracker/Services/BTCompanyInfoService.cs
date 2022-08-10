@@ -21,7 +21,7 @@ public class BTCompanyInfoService : IBTCompanyInfoService
     {
         Company result = new();
 
-        if (companyId is not null)
+        if (companyId is null)
         {
             return result;
         }

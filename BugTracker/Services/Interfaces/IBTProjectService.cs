@@ -12,15 +12,15 @@ public interface IBTProjectService
 
     public Task ArchiveProjectAsync(Project project);
     public Task RestoreProjectAsync(Project project);
-    public Task<List<Project>> GetUnassignedProjects(int companyId);
+    public Task<List<Project>> GetUnassignedProjectsAsync(int companyId);
 
-    public Task<List<Project>> GetAllProjectsByCompany(int companyId);
+    public Task<List<Project>> GetAllProjectsByCompanyAsync(int companyId);
 
-    public Task<List<Project>> GetAllProjectsByPriority(int companyId, string priorityName);
+    public Task<List<Project>> GetAllProjectsByPriorityAsync(int companyId, string priorityName);
 
     public Task<List<BTUser>> GetAllProjectMembersExceptPMAsync(int projectId);
 
-    public Task<List<Project>> GetArchivedProjectsByCompany(int companyId);
+    public Task<List<Project>> GetArchivedProjectsByCompanyAsync(int companyId);
 
     public Task<List<BTUser>> GetDevelopersOnProjectAsync(int projectId);
 
@@ -41,7 +41,7 @@ public interface IBTProjectService
 
     public Task<bool> IsAssignedProjectManagerAsync(string userId, int projectId);
 
-    public Task<int> LookupProjectPriorityId(string priorityName);
+    public Task<int> LookupProjectPriorityIdAsync(string priorityName);
 
     public Task RemoveProjectManagerAsync(int projectId);
 

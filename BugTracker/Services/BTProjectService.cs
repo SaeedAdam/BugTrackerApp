@@ -104,7 +104,7 @@ public class BTProjectService : IBTProjectService
         }
     }
 
-    public async Task<List<Project>> GetUnassignedProjects(int companyId)
+    public async Task<List<Project>> GetUnassignedProjectsAsync(int companyId)
     {
         List<Project> result = new();
 
@@ -124,7 +124,7 @@ public class BTProjectService : IBTProjectService
         return result;
     }
 
-    public async Task<List<Project>> GetAllProjectsByCompany(int companyId)
+    public async Task<List<Project>> GetAllProjectsByCompanyAsync(int companyId)
     {
         List<Project> projects = new();
 
@@ -152,10 +152,10 @@ public class BTProjectService : IBTProjectService
         return projects;
     }
 
-    public async Task<List<Project>> GetAllProjectsByPriority(int companyId, string priorityName)
+    public async Task<List<Project>> GetAllProjectsByPriorityAsync(int companyId, string priorityName)
     {
-        List<Project> projects = await GetAllProjectsByCompany(companyId);
-        int priorityId = await LookupProjectPriorityId(priorityName);
+        List<Project> projects = await GetAllProjectsByCompanyAsync(companyId);
+        int priorityId = await LookupProjectPriorityIdAsync(priorityName);
 
         return projects.Where(p => p.ProjectPriorityId == priorityId).ToList();
     }
@@ -171,7 +171,7 @@ public class BTProjectService : IBTProjectService
         return teamMembers;
     }
 
-    public async Task<List<Project>> GetArchivedProjectsByCompany(int companyId)
+    public async Task<List<Project>> GetArchivedProjectsByCompanyAsync(int companyId)
     {
         List<Project> projects = await _context.Projects.Where(p => p.CompanyId == companyId && p.Archived == true)
                                                         .Include(p => p.Members)
@@ -354,7 +354,7 @@ public class BTProjectService : IBTProjectService
         }
     }
 
-    public async Task<int> LookupProjectPriorityId(string priorityName)
+    public async Task<int> LookupProjectPriorityIdAsync(string priorityName)
     {
         int priorityId = (await _context.ProjectPriorities.FirstOrDefaultAsync(p => p.Name == priorityName)).Id;
 

@@ -66,4 +66,12 @@
     <Folder Include="wwwroot\img\contenttype\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Home\Dashboard.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Home\Dashboard.cshtml" />
+  </ItemGroup>
+
 </Project>

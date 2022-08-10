@@ -21,10 +21,13 @@
             <span class="d-none d-sm-inline mx-1">@btUser.FirstName</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-            <li class="dropdown-item">Your role is: 
-                @foreach(var role in userRoles)
+            <li class="dropdown-item">Your role is:
+                @if (userRoles != null)
                 {
-                    <p class="fw-bold">@role</p>
+                    foreach (var role in userRoles)
+                    {
+                        <p class="fw-bold">@role</p>
+                    }
                 }
             </li>
             <li>

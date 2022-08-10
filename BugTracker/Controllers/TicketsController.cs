@@ -166,7 +166,7 @@ public class TicketsController : Controller
 
         if (User.IsInRole(nameof(Roles.Admin)))
         {
-            ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompany(companyId), "Id", "Name");
+            ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompanyAsync(companyId), "Id", "Name");
         }
         else
         {
@@ -220,7 +220,7 @@ public class TicketsController : Controller
 
         if (User.IsInRole(nameof(Roles.Admin)))
         {
-            ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompany(btUser.CompanyId), "Id", "Name");
+            ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompanyAsync(btUser.CompanyId), "Id", "Name");
         }
         else
         {

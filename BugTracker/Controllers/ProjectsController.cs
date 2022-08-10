@@ -53,7 +53,7 @@ public class ProjectsController : Controller
         }
         else
         {
-            projects = await _projectService.GetAllProjectsByCompany(companyId);
+            projects = await _projectService.GetAllProjectsByCompanyAsync(companyId);
         }
 
         return View(projects);
@@ -62,7 +62,7 @@ public class ProjectsController : Controller
     {
         int companyId = User.Identity.GetCompanyId().Value;
 
-        var projects = await _projectService.GetArchivedProjectsByCompany(companyId);
+        var projects = await _projectService.GetArchivedProjectsByCompanyAsync(companyId);
 
         return View(projects);
     }
@@ -72,7 +72,7 @@ public class ProjectsController : Controller
     {
         int companyId = User.Identity.GetCompanyId().Value;
 
-        List<Project> projects = await _projectService.GetUnassignedProjects(companyId);
+        List<Project> projects = await _projectService.GetUnassignedProjectsAsync(companyId);
 
         return View(projects);
     }
@@ -404,7 +404,7 @@ public class ProjectsController : Controller
     {
         int companyId = User.Identity.GetCompanyId().Value;
 
-        return (await _projectService.GetAllProjectsByCompany(companyId)).Any(p=>p.Id == id);
+        return (await _projectService.GetAllProjectsByCompanyAsync(companyId)).Any(p=>p.Id == id);
     }
 
 }

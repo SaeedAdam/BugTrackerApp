@@ -340,20 +340,20 @@ public class BTTicketService : IBTTicketService
         {
             if (await _rolesService.IsUserInRoleAsync(btUser, Roles.Admin.ToString()))
             {
-                tickets = (await _projectService.GetAllProjectsByCompany(companyId))
+                tickets = (await _projectService.GetAllProjectsByCompanyAsync(companyId))
                     .SelectMany(p => p.Tickets)
                     .ToList();
             }
             else if (await _rolesService.IsUserInRoleAsync(btUser, Roles.Developer.ToString()))
             {
-                tickets = (await _projectService.GetAllProjectsByCompany(companyId))
+                tickets = (await _projectService.GetAllProjectsByCompanyAsync(companyId))
                     .SelectMany(p => p.Tickets)
                     .Where(t => t.DeveloperUserId == userId || t.OwnerUserId == userId)
                     .ToList();
             }
             else if (await _rolesService.IsUserInRoleAsync(btUser, Roles.Submitter.ToString()))
             {
-                tickets = (await _projectService.GetAllProjectsByCompany(companyId))
+                tickets = (await _projectService.GetAllProjectsByCompanyAsync(companyId))
                     .SelectMany(p => p.Tickets)
                     .Where(t => t.OwnerUserId == userId)
                     .ToList();
