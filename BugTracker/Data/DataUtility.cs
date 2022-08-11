@@ -21,10 +21,11 @@ public class DataUtility
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         //It will be automatically overwritten if we are running on Heroku
         var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
         return string.IsNullOrEmpty(databaseUrl) ? connectionString : BuildConnectionString(databaseUrl);
     }
 
-    public static string BuildConnectionString(string databaseUrl)
+    private static string BuildConnectionString(string databaseUrl)
     {
         //Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.
         var databaseUri = new Uri(databaseUrl);
@@ -77,6 +78,7 @@ public class DataUtility
         //Seed Roles
         await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
         await roleManager.CreateAsync(new IdentityRole(Roles.ProjectManager.ToString()));
+        await roleManager.CreateAsync(new IdentityRole(Roles.TechLead.ToString()));
         await roleManager.CreateAsync(new IdentityRole(Roles.Developer.ToString()));
         await roleManager.CreateAsync(new IdentityRole(Roles.Submitter.ToString()));
         await roleManager.CreateAsync(new IdentityRole(Roles.DemoUser.ToString()));
@@ -87,11 +89,11 @@ public class DataUtility
         try
         {
             IList<Company> defaultcompanies = new List<Company>() {
-                    new Company() { Name = "Company1", Description="This is default Company 1" },
-                    new Company() { Name = "Company2", Description="This is default Company 2" },
-                    new Company() { Name = "Company3", Description="This is default Company 3" },
-                    new Company() { Name = "Company4", Description="This is default Company 4" },
-                    new Company() { Name = "Company5", Description="This is default Company 5" }
+                    new Company() { Name = "Apple", Description="The best UI/UX company." },
+                    new Company() { Name = "Microsoft", Description="Windows and more..." },
+                    new Company() { Name = "Google", Description="Search anything and everything." },
+                    new Company() { Name = "Meta", Description="Connect the world." },
+                    new Company() { Name = "Amazon", Description="Buy anything you want." }
                 };
 
             var dbCompanies = context.Companies.Select(c => c.Name).ToList();
@@ -99,11 +101,11 @@ public class DataUtility
             await context.SaveChangesAsync();
 
             //Get company Ids
-            company1Id = context.Companies.FirstOrDefault(p => p.Name == "Company1").Id;
-            company2Id = context.Companies.FirstOrDefault(p => p.Name == "Company2").Id;
-            company3Id = context.Companies.FirstOrDefault(p => p.Name == "Company3").Id;
-            company4Id = context.Companies.FirstOrDefault(p => p.Name == "Company4").Id;
-            company5Id = context.Companies.FirstOrDefault(p => p.Name == "Company5").Id;
+            company1Id = context.Companies.FirstOrDefault(p => p.Name == "Apple").Id;
+            company2Id = context.Companies.FirstOrDefault(p => p.Name == "Microsoft").Id;
+            company3Id = context.Companies.FirstOrDefault(p => p.Name == "Google").Id;
+            company4Id = context.Companies.FirstOrDefault(p => p.Name == "Meta").Id;
+            company5Id = context.Companies.FirstOrDefault(p => p.Name == "Amazon").Id;
         }
         catch (Exception ex)
         {

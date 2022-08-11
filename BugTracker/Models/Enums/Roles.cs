@@ -6,5 +6,6 @@ public enum Roles
     ProjectManager,
     Developer,
     Submitter,
-    DemoUser
+    DemoUser,
+    TechLead
 }
