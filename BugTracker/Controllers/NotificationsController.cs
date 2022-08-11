@@ -46,8 +46,8 @@ public class NotificationsController : Controller
     // GET: Notifications/Create
     public IActionResult Create()
     {
-        ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "Id");
-        ViewData["SenderId"] = new SelectList(_context.Users, "Id", "Id");
+        ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "FirstName");
+        ViewData["SenderId"] = new SelectList(_context.Users, "Id", "FirstName");
         ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
         return View();
     }
@@ -65,8 +65,8 @@ public class NotificationsController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "Id", notification.RecipientId);
-        ViewData["SenderId"] = new SelectList(_context.Users, "Id", "Id", notification.SenderId);
+        ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "FirstName", notification.RecipientId);
+        ViewData["SenderId"] = new SelectList(_context.Users, "Id", "FirstName", notification.SenderId);
         ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
         return View(notification);
     }
@@ -84,8 +84,8 @@ public class NotificationsController : Controller
         {
             return NotFound();
         }
-        ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "Id", notification.RecipientId);
-        ViewData["SenderId"] = new SelectList(_context.Users, "Id", "Id", notification.SenderId);
+        ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "FirstName", notification.RecipientId);
+        ViewData["SenderId"] = new SelectList(_context.Users, "Id", "FirstName", notification.SenderId);
         ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
         return View(notification);
     }
@@ -122,8 +122,8 @@ public class NotificationsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "Id", notification.RecipientId);
-        ViewData["SenderId"] = new SelectList(_context.Users, "Id", "Id", notification.SenderId);
+        ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "FirstName", notification.RecipientId);
+        ViewData["SenderId"] = new SelectList(_context.Users, "Id", "FirstName", notification.SenderId);
         ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
         return View(notification);
     }

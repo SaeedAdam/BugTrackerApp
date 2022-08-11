@@ -75,8 +75,9 @@ public class Program
         app.MapRazorPages();
 
         // Create instance of our DataUtility and call initial migration
-        var dataService = app.Services.CreateScope().ServiceProvider.GetRequiredService<DataUtility>();
+        //var dataService = app.Services.CreateScope().ServiceProvider.GetRequiredService<DataUtility>();
         await DataUtility.ManageDataAsync(app);
+        
 
         await app.RunAsync();
     }
