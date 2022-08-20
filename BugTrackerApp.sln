@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTracker", "BugTracker\BugTracker.csproj", "{9CCDEBF0-DCD5-4936-A216-20DD57843CB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BugTracker", "BugTracker\BugTracker.csproj", "{9CCDEBF0-DCD5-4936-A216-20DD57843CB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BTApp", "BTApp", "{B7B15C42-5E83-4545-91CC-D866209F0651}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +20,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9CCDEBF0-DCD5-4936-A216-20DD57843CB2} = {B7B15C42-5E83-4545-91CC-D866209F0651}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0B4ADC42-E724-47B8-820D-B819A8C0A065}
