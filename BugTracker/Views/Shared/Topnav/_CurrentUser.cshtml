@@ -1,6 +1,8 @@
 @using Microsoft.AspNetCore.Identity
+@using BugTracker.Services.Interfaces
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
+@inject IBTImageService ImageService
 
 @{
     var btUser = await UserManager.GetUserAsync(User);
@@ -12,7 +14,15 @@
         <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
-                    <img alt="Image placeholder" src="~/img/theme/team-4.jpg">
+
+                    @if (btUser?.AvatarFileData is not null)
+                    {
+                        <img src="@ImageService.DecodeImage(btUser.AvatarFileData, btUser.AvatarFileContentType)" />
+                    }
+                    else
+                    {
+                        <img src="/img/brand/favicon.png"/>
+                    }
                 </span>
                 <div class="media-body  ml-2  d-none d-lg-block">
                     <span class="mb-0 text-sm  font-weight-bold">
@@ -28,6 +38,6 @@
                 </div>
             </div>
         </a>
-        <partial name="Topnav/_Dropdown"/>
+        <partial name="Topnav/_Dropdown" />
     </li>
 </ul>
