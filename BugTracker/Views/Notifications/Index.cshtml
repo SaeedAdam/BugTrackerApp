@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BugTracker.Models.Notification>
+﻿@model IEnumerable<Notification>
 
 @{
     ViewData["Title"] = "Index";
@@ -11,33 +11,34 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Viewed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ticket)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Recipient)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sender)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Message)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Viewed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ticket)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Recipient)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sender)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
@@ -66,6 +67,6 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

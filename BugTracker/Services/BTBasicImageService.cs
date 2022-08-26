@@ -1,5 +1,4 @@
-﻿
-public class BTBasicImageService : IBTImageService
+﻿public class BTBasicImageService : IBTImageService
 {
     public async Task<byte[]> EncodeImageAsync(IFormFile file)
     {

@@ -1,87 +1,87 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-BugTracker-39414050-2019-4F24-B535-5D479D54A57B</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>aspnet-BugTracker-39414050-2019-4F24-B535-5D479D54A57B</UserSecretsId>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Views\ProjectPriorities\**" />
-    <Compile Remove="Views\TicketAttachments\**" />
-    <Compile Remove="Views\TicketComments\**" />
-    <Compile Remove="Views\TicketHistories\**" />
-    <Compile Remove="Views\TicketPriorities\**" />
-    <Compile Remove="Views\TicketStatus\**" />
-    <Compile Remove="Views\TicketTypes\**" />
-    <Content Remove="Views\ProjectPriorities\**" />
-    <Content Remove="Views\TicketAttachments\**" />
-    <Content Remove="Views\TicketComments\**" />
-    <Content Remove="Views\TicketHistories\**" />
-    <Content Remove="Views\TicketPriorities\**" />
-    <Content Remove="Views\TicketStatus\**" />
-    <Content Remove="Views\TicketTypes\**" />
-    <EmbeddedResource Remove="Views\ProjectPriorities\**" />
-    <EmbeddedResource Remove="Views\TicketAttachments\**" />
-    <EmbeddedResource Remove="Views\TicketComments\**" />
-    <EmbeddedResource Remove="Views\TicketHistories\**" />
-    <EmbeddedResource Remove="Views\TicketPriorities\**" />
-    <EmbeddedResource Remove="Views\TicketStatus\**" />
-    <EmbeddedResource Remove="Views\TicketTypes\**" />
-    <None Remove="Views\ProjectPriorities\**" />
-    <None Remove="Views\TicketAttachments\**" />
-    <None Remove="Views\TicketComments\**" />
-    <None Remove="Views\TicketHistories\**" />
-    <None Remove="Views\TicketPriorities\**" />
-    <None Remove="Views\TicketStatus\**" />
-    <None Remove="Views\TicketTypes\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Views\ProjectPriorities\**" />
+		<Compile Remove="Views\TicketAttachments\**" />
+		<Compile Remove="Views\TicketComments\**" />
+		<Compile Remove="Views\TicketHistories\**" />
+		<Compile Remove="Views\TicketPriorities\**" />
+		<Compile Remove="Views\TicketStatus\**" />
+		<Compile Remove="Views\TicketTypes\**" />
+		<Content Remove="Views\ProjectPriorities\**" />
+		<Content Remove="Views\TicketAttachments\**" />
+		<Content Remove="Views\TicketComments\**" />
+		<Content Remove="Views\TicketHistories\**" />
+		<Content Remove="Views\TicketPriorities\**" />
+		<Content Remove="Views\TicketStatus\**" />
+		<Content Remove="Views\TicketTypes\**" />
+		<EmbeddedResource Remove="Views\ProjectPriorities\**" />
+		<EmbeddedResource Remove="Views\TicketAttachments\**" />
+		<EmbeddedResource Remove="Views\TicketComments\**" />
+		<EmbeddedResource Remove="Views\TicketHistories\**" />
+		<EmbeddedResource Remove="Views\TicketPriorities\**" />
+		<EmbeddedResource Remove="Views\TicketStatus\**" />
+		<EmbeddedResource Remove="Views\TicketTypes\**" />
+		<None Remove="Views\ProjectPriorities\**" />
+		<None Remove="Views\TicketAttachments\**" />
+		<None Remove="Views\TicketComments\**" />
+		<None Remove="Views\TicketHistories\**" />
+		<None Remove="Views\TicketPriorities\**" />
+		<None Remove="Views\TicketStatus\**" />
+		<None Remove="Views\TicketTypes\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Controllers\ProjectPrioritiesController.cs" />
-    <Compile Remove="Controllers\TicketAttachmentsController.cs" />
-    <Compile Remove="Controllers\TicketCommentsController.cs" />
-    <Compile Remove="Controllers\TicketHistoriesController.cs" />
-    <Compile Remove="Controllers\TicketPrioritiesController.cs" />
-    <Compile Remove="Controllers\TicketStatusController.cs" />
-    <Compile Remove="Controllers\TicketTypesController.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Controllers\ProjectPrioritiesController.cs" />
+		<Compile Remove="Controllers\TicketAttachmentsController.cs" />
+		<Compile Remove="Controllers\TicketCommentsController.cs" />
+		<Compile Remove="Controllers\TicketHistoriesController.cs" />
+		<Compile Remove="Controllers\TicketPrioritiesController.cs" />
+		<Compile Remove="Controllers\TicketStatusController.cs" />
+		<Compile Remove="Controllers\TicketTypesController.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MailKit" Version="3.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.3.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
-    <PackageReference Include="MimeKit" Version="3.4.0" />
-    <PackageReference Include="Npgsql" Version="6.0.6" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MailKit" Version="3.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
+		<PackageReference Include="Microsoft.Build.Framework" Version="17.3.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+		<PackageReference Include="MimeKit" Version="3.4.0" />
+		<PackageReference Include="Npgsql" Version="6.0.6" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\img\contenttype\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="wwwroot\img\contenttype\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Home\Dashboard.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Home\Dashboard.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Home\Dashboard.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<_ContentIncludedByDefault Remove="Views\Home\Dashboard.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Update="wwwroot\favicon.png">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Update="wwwroot\favicon.png">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 
 </Project>

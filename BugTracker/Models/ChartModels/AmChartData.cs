@@ -5,7 +5,6 @@ public class AmChartData
     public AmItem[] Data { get; set; }
 }
 
-
 public class AmItem
 {
     public string Project { get; set; }

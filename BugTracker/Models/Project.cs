@@ -8,16 +8,14 @@ public class Project
 {
     public int Id { get; set; }
 
-    [DisplayName("Company")]
-    public int? CompanyId { get; set; }
+    [DisplayName("Company")] public int? CompanyId { get; set; }
 
     [Required]
     [StringLength(50)]
     [DisplayName("Project Name")]
     public string Name { get; set; }
 
-    [DisplayName("Description")]
-    public string Description { get; set; }
+    [DisplayName("Description")] public string Description { get; set; }
 
     [DataType(DataType.Date)]
     [DisplayName("Start Date")]
@@ -27,23 +25,19 @@ public class Project
     [DisplayName("End Date")]
     public DateTimeOffset EndDate { get; set; }
 
-    [DisplayName("Project Priority")]
-    public int? ProjectPriorityId { get; set; }
+    [DisplayName("Project Priority")] public int? ProjectPriorityId { get; set; }
 
     [NotMapped]
     [DataType(DataType.Upload)]
     public IFormFile ImageFormFile { get; set; }
 
-    [DisplayName("Image Name")]
-    public string ImageFileName { get; set; }
+    [DisplayName("Image Name")] public string ImageFileName { get; set; }
+
     public byte[] ImageFileData { get; set; }
 
-    [DisplayName("File Extension")]
-    public string ImageFileContentType { get; set; }
+    [DisplayName("File Extension")] public string ImageFileContentType { get; set; }
 
-    [DisplayName("Archived")]
-    public bool Archived { get; set; }
-
+    [DisplayName("Archived")] public bool Archived { get; set; }
 
 
     //-- Navigation properties --//

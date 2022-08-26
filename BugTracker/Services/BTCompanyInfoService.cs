@@ -21,10 +21,7 @@ public class BTCompanyInfoService : IBTCompanyInfoService
     {
         Company result = new();
 
-        if (companyId is null)
-        {
-            return result;
-        }
+        if (companyId is null) return result;
 
         result = await _context.Companies
             .Include(c => c.Members)
@@ -33,7 +30,6 @@ public class BTCompanyInfoService : IBTCompanyInfoService
             .FirstOrDefaultAsync(c => c.Id == companyId);
 
         return result;
-
     }
 
     public async Task<List<BTUser>> GetAllMembersAsync(int companyId)
@@ -50,25 +46,25 @@ public class BTCompanyInfoService : IBTCompanyInfoService
         List<Project> result = new();
 
         result = await _context.Projects.Where(p => p.CompanyId == companyId)
-                                        .Include(p => p.Members)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.Comments)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.History)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.Notifications)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.DeveloperUser)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.Attachments)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.TicketStatus)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.TicketPriority)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.TicketType)
-                                        .Include(p => p.ProjectPriority)
-                                        .ToListAsync();
+            .Include(p => p.Members)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.Comments)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.History)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.Notifications)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.DeveloperUser)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.Attachments)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketStatus)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketPriority)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketType)
+            .Include(p => p.ProjectPriority)
+            .ToListAsync();
 
         return result;
     }

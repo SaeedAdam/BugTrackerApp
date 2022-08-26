@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BugTracker.Models.Invite>
+﻿@model IEnumerable<Invite>
 
 @{
     ViewData["Title"] = "Index";
@@ -11,45 +11,46 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.InviteDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JoinDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CompanyToken)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InviteeEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InviteeFirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InviteeLastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsValid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invitor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invitee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Company)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.InviteDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JoinDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyToken)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InviteeEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InviteeFirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InviteeLastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsValid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Invitor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Invitee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Project)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Company)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.InviteDate)
@@ -90,6 +91,6 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

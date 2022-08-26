@@ -18,27 +18,22 @@ public class NotificationsController : Controller
     // GET: Notifications
     public async Task<IActionResult> Index()
     {
-        var applicationDbContext = _context.Notifications.Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
+        var applicationDbContext = _context.Notifications.Include(n => n.Recipient).Include(n => n.Sender)
+            .Include(n => n.Ticket);
         return View(await applicationDbContext.ToListAsync());
     }
 
     // GET: Notifications/Details/5
     public async Task<IActionResult> Details(int? id)
     {
-        if (id == null || _context.Notifications == null)
-        {
-            return NotFound();
-        }
+        if (id == null || _context.Notifications == null) return NotFound();
 
         var notification = await _context.Notifications
             .Include(n => n.Recipient)
             .Include(n => n.Sender)
             .Include(n => n.Ticket)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (notification == null)
-        {
-            return NotFound();
-        }
+        if (notification == null) return NotFound();
 
         return View(notification);
     }
@@ -57,7 +52,8 @@ public class NotificationsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,TicketId,Title,Message,Created,RecipientId,SenderId,Viewed")] Notification notification)
+    public async Task<IActionResult> Create(
+        [Bind("Id,TicketId,Title,Message,Created,RecipientId,SenderId,Viewed")] Notification notification)
     {
         if (ModelState.IsValid)
         {
@@ -65,6 +61,7 @@ public class NotificationsController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
         ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "FirstName", notification.RecipientId);
         ViewData["SenderId"] = new SelectList(_context.Users, "Id", "FirstName", notification.SenderId);
         ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
@@ -74,16 +71,10 @@ public class NotificationsController : Controller
     // GET: Notifications/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
-        if (id == null || _context.Notifications == null)
-        {
-            return NotFound();
-        }
+        if (id == null || _context.Notifications == null) return NotFound();
 
         var notification = await _context.Notifications.FindAsync(id);
-        if (notification == null)
-        {
-            return NotFound();
-        }
+        if (notification == null) return NotFound();
         ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "FirstName", notification.RecipientId);
         ViewData["SenderId"] = new SelectList(_context.Users, "Id", "FirstName", notification.SenderId);
         ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
@@ -95,12 +86,10 @@ public class NotificationsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,TicketId,Title,Message,Created,RecipientId,SenderId,Viewed")] Notification notification)
+    public async Task<IActionResult> Edit(int id,
+        [Bind("Id,TicketId,Title,Message,Created,RecipientId,SenderId,Viewed")] Notification notification)
     {
-        if (id != notification.Id)
-        {
-            return NotFound();
-        }
+        if (id != notification.Id) return NotFound();
 
         if (ModelState.IsValid)
         {
@@ -112,16 +101,13 @@ public class NotificationsController : Controller
             catch (DbUpdateConcurrencyException)
             {
                 if (!NotificationExists(notification.Id))
-                {
                     return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
+
             return RedirectToAction(nameof(Index));
         }
+
         ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "FirstName", notification.RecipientId);
         ViewData["SenderId"] = new SelectList(_context.Users, "Id", "FirstName", notification.SenderId);
         ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
@@ -131,38 +117,27 @@ public class NotificationsController : Controller
     // GET: Notifications/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
-        if (id == null || _context.Notifications == null)
-        {
-            return NotFound();
-        }
+        if (id == null || _context.Notifications == null) return NotFound();
 
         var notification = await _context.Notifications
             .Include(n => n.Recipient)
             .Include(n => n.Sender)
             .Include(n => n.Ticket)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (notification == null)
-        {
-            return NotFound();
-        }
+        if (notification == null) return NotFound();
 
         return View(notification);
     }
 
     // POST: Notifications/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost]
+    [ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        if (_context.Notifications == null)
-        {
-            return Problem("Entity set 'ApplicationDbContext.Notifications'  is null.");
-        }
+        if (_context.Notifications == null) return Problem("Entity set 'ApplicationDbContext.Notifications'  is null.");
         var notification = await _context.Notifications.FindAsync(id);
-        if (notification != null)
-        {
-            _context.Notifications.Remove(notification);
-        }
+        if (notification != null) _context.Notifications.Remove(notification);
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));

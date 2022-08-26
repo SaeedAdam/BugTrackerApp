@@ -5,7 +5,6 @@ public class PlotlyBarData
     public List<PlotlyBar> Data { get; set; }
 }
 
-
 public class PlotlyBar
 {
     public string[] X { get; set; }

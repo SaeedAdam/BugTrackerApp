@@ -27,20 +27,19 @@ public class BTNotificationService : IBTNotificationService
 
     public async Task<List<Notification>> GetReceivedNotificationsAsync(string userId)
     {
-        List<Notification> receivedNotifications = await _context.Notifications
+        var receivedNotifications = await _context.Notifications
             .Include(n => n.Recipient)
             .Include(n => n.Sender)
             .Include(n => n.Ticket)
-                .ThenInclude(t => t.Project)
+            .ThenInclude(t => t.Project)
             .Where(n => n.RecipientId == userId).ToListAsync();
 
         return receivedNotifications;
-
     }
 
     public async Task<List<Notification>> GetSentNotificationsAsync(string userId)
     {
-        List<Notification> sentNotifications = await _context.Notifications
+        var sentNotifications = await _context.Notifications
             .Include(n => n.Recipient)
             .Include(n => n.Sender)
             .Include(n => n.Ticket)
@@ -54,9 +53,9 @@ public class BTNotificationService : IBTNotificationService
     {
         try
         {
-            List<BTUser> members = await _rolesService.GetUsersInRoleAsync(role, companyId);
+            var members = await _rolesService.GetUsersInRoleAsync(role, companyId);
 
-            foreach (BTUser btUser in members)
+            foreach (var btUser in members)
             {
                 notification.RecipientId = btUser.Id;
                 await SendEmailNotificationAsync(notification, notification.Title);
@@ -73,7 +72,7 @@ public class BTNotificationService : IBTNotificationService
     {
         try
         {
-            foreach (BTUser btUser in members)
+            foreach (var btUser in members)
             {
                 notification.RecipientId = btUser.Id;
                 await SendEmailNotificationAsync(notification, notification.Title);
@@ -88,12 +87,12 @@ public class BTNotificationService : IBTNotificationService
 
     public async Task<bool> SendEmailNotificationAsync(Notification notification, string emailSubject)
     {
-        BTUser btUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == notification.RecipientId);
+        var btUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == notification.RecipientId);
 
         if (btUser is not null)
         {
-            string btUserEmail = btUser.Email;
-            string message = notification.Message;
+            var btUserEmail = btUser.Email;
+            var message = notification.Message;
 
             //Send Email 
             try

@@ -7,25 +7,25 @@
 <h1>Edit</h1>
 
 <h4>Invite</h4>
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id"/>
             <div class="form-group">
                 <label asp-for="InviteDate" class="control-label"></label>
-                <input asp-for="InviteDate" class="form-control" />
+                <input asp-for="InviteDate" class="form-control"/>
                 <span asp-validation-for="InviteDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="JoinDate" class="control-label"></label>
-                <input asp-for="JoinDate" class="form-control" />
+                <input asp-for="JoinDate" class="form-control"/>
                 <span asp-validation-for="JoinDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CompanyToken" class="control-label"></label>
-                <input asp-for="CompanyToken" class="form-control" />
+                <input asp-for="CompanyToken" class="form-control"/>
                 <span asp-validation-for="CompanyToken" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -50,26 +50,26 @@
             </div>
             <div class="form-group">
                 <label asp-for="InviteeEmail" class="control-label"></label>
-                <input asp-for="InviteeEmail" class="form-control" />
+                <input asp-for="InviteeEmail" class="form-control"/>
                 <span asp-validation-for="InviteeEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="InviteeFirstName" class="control-label"></label>
-                <input asp-for="InviteeFirstName" class="form-control" />
+                <input asp-for="InviteeFirstName" class="form-control"/>
                 <span asp-validation-for="InviteeFirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="InviteeLastName" class="control-label"></label>
-                <input asp-for="InviteeLastName" class="form-control" />
+                <input asp-for="InviteeLastName" class="form-control"/>
                 <span asp-validation-for="InviteeLastName" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsValid" /> @Html.DisplayNameFor(model => model.IsValid)
+                    <input class="form-check-input" asp-for="IsValid"/> @Html.DisplayNameFor(model => model.IsValid)
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary"/>
             </div>
         </form>
     </div>
@@ -80,5 +80,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

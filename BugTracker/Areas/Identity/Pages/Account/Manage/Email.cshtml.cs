@@ -1,24 +1,25 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
 #nullable disable
 
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Text.Encodings.Web;
 using BugTracker.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.Encodings.Web;
 
 namespace BugTracker.Areas.Identity.Pages.Account.Manage;
 
 public class EmailModel : PageModel
 {
-    private readonly UserManager<BTUser> _userManager;
-    private readonly SignInManager<BTUser> _signInManager;
     private readonly IEmailSender _emailSender;
+    private readonly SignInManager<BTUser> _signInManager;
+    private readonly UserManager<BTUser> _userManager;
 
     public EmailModel(
         UserManager<BTUser> userManager,
@@ -56,22 +57,6 @@ public class EmailModel : PageModel
     [BindProperty]
     public InputModel Input { get; set; }
 
-    /// <summary>
-    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
-    /// </summary>
-    public class InputModel
-    {
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        [Required]
-        [EmailAddress]
-        [Display(Name = "New email")]
-        public string NewEmail { get; set; }
-    }
-
     private async Task LoadAsync(BTUser user)
     {
         var email = await _userManager.GetEmailAsync(user);
@@ -79,7 +64,7 @@ public class EmailModel : PageModel
 
         Input = new InputModel
         {
-            NewEmail = email,
+            NewEmail = email
         };
 
         IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -88,10 +73,7 @@ public class EmailModel : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+        if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 
         await LoadAsync(user);
         return Page();
@@ -100,10 +82,7 @@ public class EmailModel : PageModel
     public async Task<IActionResult> OnPostChangeEmailAsync()
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+        if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 
         if (!ModelState.IsValid)
         {
@@ -119,9 +98,9 @@ public class EmailModel : PageModel
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             var callbackUrl = Url.Page(
                 "/Account/ConfirmEmailChange",
-                pageHandler: null,
-                values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
-                protocol: Request.Scheme);
+                null,
+                new {area = "Identity", userId, email = Input.NewEmail, code},
+                Request.Scheme);
             await _emailSender.SendEmailAsync(
                 Input.NewEmail,
                 "Confirm your email",
@@ -138,10 +117,7 @@ public class EmailModel : PageModel
     public async Task<IActionResult> OnPostSendVerificationEmailAsync()
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+        if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 
         if (!ModelState.IsValid)
         {
@@ -155,9 +131,9 @@ public class EmailModel : PageModel
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var callbackUrl = Url.Page(
             "/Account/ConfirmEmail",
-            pageHandler: null,
-            values: new { area = "Identity", userId = userId, code = code },
-            protocol: Request.Scheme);
+            null,
+            new {area = "Identity", userId, code},
+            Request.Scheme);
         await _emailSender.SendEmailAsync(
             email,
             "Confirm your email",
@@ -165,5 +141,21 @@ public class EmailModel : PageModel
 
         StatusMessage = "Verification email sent. Please check your email.";
         return RedirectToPage();
+    }
+
+    /// <summary>
+    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+    ///     directly from your code. This API may change or be removed in future releases.
+    /// </summary>
+    public class InputModel
+    {
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        [Required]
+        [EmailAddress]
+        [Display(Name = "New email")]
+        public string NewEmail { get; set; }
     }
 }

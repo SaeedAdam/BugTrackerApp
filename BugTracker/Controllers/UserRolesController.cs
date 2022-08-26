@@ -1,5 +1,4 @@
 ﻿using BugTracker.Extensions;
-using BugTracker.Models;
 using BugTracker.Models.ViewModels;
 using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -11,8 +10,8 @@ namespace BugTracker.Controllers;
 [Authorize]
 public class UserRolesController : Controller
 {
-    private readonly IBTRolesService _rolesService;
     private readonly IBTCompanyInfoService _companyInfoService;
+    private readonly IBTRolesService _rolesService;
 
     public UserRolesController(IBTRolesService rolesService, IBTCompanyInfoService companyInfoService)
     {
@@ -27,22 +26,22 @@ public class UserRolesController : Controller
         List<ManageUserRolesViewModel> model = new();
 
         // Get CompanyId
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         // Get all company users
-        List<BTUser> users = await _companyInfoService.GetAllMembersAsync(companyId);
+        var users = await _companyInfoService.GetAllMembersAsync(companyId);
 
 
         //Loop over the users to populate the ViewModel 
         // - instantiate ViewModel 
         // - use _rolesService
         // - Create multi-select
-        foreach (BTUser user in users)
+        foreach (var user in users)
         {
             ManageUserRolesViewModel viewModel = new();
 
             viewModel.BTUser = user;
-            IEnumerable<string> selected = await _rolesService.GetUserRolesAsync(user);
+            var selected = await _rolesService.GetUserRolesAsync(user);
             viewModel.Roles = new MultiSelectList(await _rolesService.GetRolesAsync(), "Name", "Name", selected);
 
             model.Add(viewModel);
@@ -58,26 +57,23 @@ public class UserRolesController : Controller
     public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel member)
     {
         // Get the company Id
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         //Instantiate the BTUser
-        BTUser btUser = (await _companyInfoService.GetAllMembersAsync(companyId)).FirstOrDefault(u => u.Id == member.BTUser.Id);
+        var btUser =
+            (await _companyInfoService.GetAllMembersAsync(companyId)).FirstOrDefault(u => u.Id == member.BTUser.Id);
 
         //Get Roles for the user
-        IEnumerable<string> roles = await _rolesService.GetUserRolesAsync(btUser);
+        var roles = await _rolesService.GetUserRolesAsync(btUser);
 
         // Grab the selected role
-        string userRole = member.SelectedRoles.FirstOrDefault();
+        var userRole = member.SelectedRoles.FirstOrDefault();
 
         if (!string.IsNullOrEmpty(userRole))
-        {
             // Remove User from role
             if (await _rolesService.RemoveUserFromRolesAsync(btUser, roles))
-            {
                 // Add user to the new role
                 await _rolesService.AddUserToRoleAsync(btUser, userRole);
-            }
-        }
 
         // Navigate back to the view
         return RedirectToAction(nameof(ManageUserRoles));

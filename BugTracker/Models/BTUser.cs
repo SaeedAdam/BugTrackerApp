@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace BugTracker.Models;
 
@@ -10,6 +10,7 @@ public class BTUser : IdentityUser
     [Required]
     [Display(Name = "First Name")]
     public string FirstName { get; set; }
+
     [Required]
     [Display(Name = "Last Name")]
     public string LastName { get; set; }
@@ -22,21 +23,17 @@ public class BTUser : IdentityUser
     [DataType(DataType.Upload)]
     public IFormFile AvatarFormFile { get; set; }
 
-    [DisplayName("Avatar")]
-    public string AvatarFileName { get; set; }
+    [DisplayName("Avatar")] public string AvatarFileName { get; set; }
+
     public byte[] AvatarFileData { get; set; }
 
-    [DisplayName("File Extension")]
-    public string AvatarFileContentType { get; set; }
+    [DisplayName("File Extension")] public string AvatarFileContentType { get; set; }
 
     public int CompanyId { get; set; }
-
 
 
     //-- Navigation properties --//
     public virtual Company Company { get; set; }
 
     public virtual ICollection<Project> Projects { get; set; } = new HashSet<Project>();
-
-
 }

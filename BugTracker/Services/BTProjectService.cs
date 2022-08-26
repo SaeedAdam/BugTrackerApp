@@ -25,10 +25,9 @@ public class BTProjectService : IBTProjectService
 
     public async Task<bool> AddProjectManagerAsync(string userId, int projectId)
     {
-        BTUser currentPM = await GetProjectManagerAsync(projectId);
+        var currentPM = await GetProjectManagerAsync(projectId);
 
         if (currentPM is not null)
-        {
             try
             {
                 await RemoveProjectManagerAsync(projectId);
@@ -38,7 +37,6 @@ public class BTProjectService : IBTProjectService
                 Console.WriteLine($"*** Error *** - Error removing current PM from project.  --> Error: {e.Message}");
                 return false;
             }
-        }
 
         // Add the new PM
         try
@@ -51,16 +49,15 @@ public class BTProjectService : IBTProjectService
             Console.WriteLine($"*** Error *** - Error Adding new PM.  ---> {e.Message}");
             return false;
         }
-
     }
 
     public async Task<bool> AddUserToProjectAsync(string userId, int projectId)
     {
-        BTUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user != null)
         {
-            Project project = await _context.Projects.FirstOrDefaultAsync(u => u.Id == projectId);
+            var project = await _context.Projects.FirstOrDefaultAsync(u => u.Id == projectId);
 
             if (!await IsUserOnProjectAsync(userId, projectId))
             {
@@ -82,7 +79,7 @@ public class BTProjectService : IBTProjectService
         await UpdateProjectAsync(project);
 
         //Archive the tickets for the project
-        foreach (Ticket ticket in project.Tickets)
+        foreach (var ticket in project.Tickets)
         {
             ticket.ArchivedByProject = true;
             _context.Update(ticket);
@@ -96,7 +93,7 @@ public class BTProjectService : IBTProjectService
         await UpdateProjectAsync(project);
 
         //Restore the tickets for the project
-        foreach (Ticket ticket in project.Tickets)
+        foreach (var ticket in project.Tickets)
         {
             ticket.ArchivedByProject = false;
             _context.Update(ticket);
@@ -108,18 +105,14 @@ public class BTProjectService : IBTProjectService
     {
         List<Project> result = new();
 
-        List<Project> projects = await _context.Projects
+        var projects = await _context.Projects
             .Include(p => p.ProjectPriority)
             .Where(p => p.CompanyId == companyId)
             .ToListAsync();
 
-        foreach (Project project in projects)
-        {
+        foreach (var project in projects)
             if ((await GetProjectMembersByRoleAsync(project.Id, nameof(Roles.ProjectManager))).Count == 0)
-            {
                 result.Add(project);
-            }
-        }
 
         return result;
     }
@@ -131,21 +124,21 @@ public class BTProjectService : IBTProjectService
         projects = await _context.Projects.Where(p => p.CompanyId == companyId && p.Archived == false)
             .Include(p => p.Members)
             .Include(p => p.Tickets)
-                .ThenInclude(t => t.Comments)
+            .ThenInclude(t => t.Comments)
             .Include(p => p.Tickets)
-                .ThenInclude(t => t.History)
+            .ThenInclude(t => t.History)
             .Include(p => p.Tickets)
-                .ThenInclude(t => t.Notifications)
+            .ThenInclude(t => t.Notifications)
             .Include(p => p.Tickets)
-                .ThenInclude(t => t.DeveloperUser)
+            .ThenInclude(t => t.DeveloperUser)
             .Include(p => p.Tickets)
-                .ThenInclude(t => t.Attachments)
+            .ThenInclude(t => t.Attachments)
             .Include(p => p.Tickets)
-                .ThenInclude(t => t.TicketStatus)
+            .ThenInclude(t => t.TicketStatus)
             .Include(p => p.Tickets)
-                .ThenInclude(t => t.TicketPriority)
+            .ThenInclude(t => t.TicketPriority)
             .Include(p => p.Tickets)
-                .ThenInclude(t => t.TicketType)
+            .ThenInclude(t => t.TicketType)
             .Include(p => p.ProjectPriority)
             .ToListAsync();
 
@@ -154,45 +147,45 @@ public class BTProjectService : IBTProjectService
 
     public async Task<List<Project>> GetAllProjectsByPriorityAsync(int companyId, string priorityName)
     {
-        List<Project> projects = await GetAllProjectsByCompanyAsync(companyId);
-        int priorityId = await LookupProjectPriorityIdAsync(priorityName);
+        var projects = await GetAllProjectsByCompanyAsync(companyId);
+        var priorityId = await LookupProjectPriorityIdAsync(priorityName);
 
         return projects.Where(p => p.ProjectPriorityId == priorityId).ToList();
     }
 
     public async Task<List<BTUser>> GetAllProjectMembersExceptPMAsync(int projectId)
     {
-        List<BTUser> developers = await GetProjectMembersByRoleAsync(projectId, Roles.Developer.ToString());
-        List<BTUser> submitters = await GetProjectMembersByRoleAsync(projectId, Roles.Submitter.ToString());
-        List<BTUser> admins = await GetProjectMembersByRoleAsync(projectId, Roles.Admin.ToString());
+        var developers = await GetProjectMembersByRoleAsync(projectId, Roles.Developer.ToString());
+        var submitters = await GetProjectMembersByRoleAsync(projectId, Roles.Submitter.ToString());
+        var admins = await GetProjectMembersByRoleAsync(projectId, Roles.Admin.ToString());
 
-        List<BTUser> teamMembers = developers.Concat(submitters).Concat(admins).ToList();
+        var teamMembers = developers.Concat(submitters).Concat(admins).ToList();
 
         return teamMembers;
     }
 
     public async Task<List<Project>> GetArchivedProjectsByCompanyAsync(int companyId)
     {
-        List<Project> projects = await _context.Projects.Where(p => p.CompanyId == companyId && p.Archived == true)
-                                                        .Include(p => p.Members)
-                                                        .Include(p => p.Tickets)
-                                                        .ThenInclude(t => t.Comments)
-                                                        .Include(p => p.Tickets)
-                                                        .ThenInclude(t => t.History)
-                                                        .Include(p => p.Tickets)
-                                                        .ThenInclude(t => t.Notifications)
-                                                        .Include(p => p.Tickets)
-                                                        .ThenInclude(t => t.DeveloperUser)
-                                                        .Include(p => p.Tickets)
-                                                        .ThenInclude(t => t.Attachments)
-                                                        .Include(p => p.Tickets)
-                                                        .ThenInclude(t => t.TicketStatus)
-                                                        .Include(p => p.Tickets)
-                                                        .ThenInclude(t => t.TicketPriority)
-                                                        .Include(p => p.Tickets)
-                                                        .ThenInclude(t => t.TicketType)
-                                                        .Include(p => p.ProjectPriority)
-                                                        .ToListAsync();
+        var projects = await _context.Projects.Where(p => p.CompanyId == companyId && p.Archived == true)
+            .Include(p => p.Members)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.Comments)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.History)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.Notifications)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.DeveloperUser)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.Attachments)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketStatus)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketPriority)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketType)
+            .Include(p => p.ProjectPriority)
+            .ToListAsync();
 
         return projects;
     }
@@ -204,63 +197,55 @@ public class BTProjectService : IBTProjectService
 
     public async Task<BTUser> GetProjectManagerAsync(int projectId)
     {
-        Project project = await _context.Projects
+        var project = await _context.Projects
             .Include(p => p.Members)
             .FirstOrDefaultAsync(p => p.Id == projectId);
 
-        foreach (BTUser member in project?.Members)
-        {
+        foreach (var member in project?.Members)
             if (await _rolesService.IsUserInRoleAsync(member, Roles.ProjectManager.ToString()))
-            {
                 return member;
-            }
-        }
 
         return null;
     }
 
     public async Task<List<BTUser>> GetProjectMembersByRoleAsync(int projectId, string role)
     {
-        Project project = await _context.Projects
+        var project = await _context.Projects
             .Include(p => p.Members)
             .FirstOrDefaultAsync(p => p.Id == projectId);
 
         List<BTUser> members = new();
 
-        foreach (BTUser user in project.Members)
-        {
+        foreach (var user in project.Members)
             if (await _rolesService.IsUserInRoleAsync(user, role))
-            {
                 members.Add(user);
-            }
-        }
 
         return members;
     }
 
     public async Task<Project> GetProjectByIdAsync(int projectId, int companyId)
     {
-        Project project = await _context.Projects
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.TicketPriority)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.TicketStatus)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.TicketType)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.DeveloperUser)
-                                        .Include(p => p.Tickets)
-                                            .ThenInclude(t => t.OwnerUser)
-                                        .Include(p => p.Members)
-                                        .Include(p => p.ProjectPriority)
-                                        .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
+        var project = await _context.Projects
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketPriority)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketStatus)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.TicketType)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.DeveloperUser)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.OwnerUser)
+            .Include(p => p.Members)
+            .Include(p => p.ProjectPriority)
+            .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
         return project;
     }
 
     public async Task<Project> GetProjectByIdForAdminAsync(int projectId)
     {
-        Project project = await _context.Projects
+        var project = await _context.Projects
             .Include(p => p.Tickets)
             .Include(p => p.Members)
             .Include(p => p.ProjectPriority)
@@ -276,7 +261,7 @@ public class BTProjectService : IBTProjectService
 
     public async Task<List<BTUser>> GetUsersNotOnProjectAsync(int projectId, int companyId)
     {
-        List<BTUser> users = await _context.Users.Where(u => u.Projects.All(p => p.Id != projectId)).ToListAsync();
+        var users = await _context.Users.Where(u => u.Projects.All(p => p.Id != projectId)).ToListAsync();
 
         return users.Where(u => u.CompanyId == companyId).ToList();
     }
@@ -285,7 +270,7 @@ public class BTProjectService : IBTProjectService
     {
         try
         {
-            List<Project> userProjects = (await _context.Users
+            var userProjects = (await _context.Users
                 .Include(u => u.Projects)
                 .ThenInclude(p => p.Company)
                 .Include(u => u.Projects)
@@ -320,16 +305,12 @@ public class BTProjectService : IBTProjectService
 
     public async Task<bool> IsUserOnProjectAsync(string userId, int projectId)
     {
-        Project project = await _context.Projects
-            .Include(p => p.Members).
-            FirstOrDefaultAsync(p => p.Id == projectId);
+        var project = await _context.Projects
+            .Include(p => p.Members).FirstOrDefaultAsync(p => p.Id == projectId);
 
-        bool result = false;
+        var result = false;
 
-        if (project != null)
-        {
-            result = project.Members.Any(m => m.Id == userId);
-        }
+        if (project != null) result = project.Members.Any(m => m.Id == userId);
 
         return result;
     }
@@ -338,12 +319,9 @@ public class BTProjectService : IBTProjectService
     {
         try
         {
-            string projectManagerId = (await GetProjectManagerAsync(projectId))?.Id;
+            var projectManagerId = (await GetProjectManagerAsync(projectId))?.Id;
 
-            if (projectManagerId == userId)
-            {
-                return true;
-            }
+            if (projectManagerId == userId) return true;
 
             return false;
         }
@@ -356,7 +334,7 @@ public class BTProjectService : IBTProjectService
 
     public async Task<int> LookupProjectPriorityIdAsync(string priorityName)
     {
-        int priorityId = (await _context.ProjectPriorities.FirstOrDefaultAsync(p => p.Name == priorityName)).Id;
+        var priorityId = (await _context.ProjectPriorities.FirstOrDefaultAsync(p => p.Name == priorityName)).Id;
 
         return priorityId;
     }
@@ -365,17 +343,13 @@ public class BTProjectService : IBTProjectService
     {
         try
         {
-            Project project = await _context.Projects
+            var project = await _context.Projects
                 .Include(p => p.Members)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
 
-            foreach (BTUser member in project?.Members)
-            {
+            foreach (var member in project?.Members)
                 if (await _rolesService.IsUserInRoleAsync(member, Roles.ProjectManager.ToString()))
-                {
                     await RemoveUserFromProjectAsync(member.Id, projectId);
-                }
-            }
         }
         catch (Exception e)
         {
@@ -387,10 +361,10 @@ public class BTProjectService : IBTProjectService
     {
         try
         {
-            List<BTUser> members = await GetProjectMembersByRoleAsync(projectId, role);
-            Project project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
+            var members = await GetProjectMembersByRoleAsync(projectId, role);
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
 
-            foreach (BTUser user in project.Members)
+            foreach (var user in project.Members)
             {
                 project.Members.Remove(user);
                 await _context.SaveChangesAsync();
@@ -407,8 +381,8 @@ public class BTProjectService : IBTProjectService
     {
         try
         {
-            BTUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            Project project = await _context.Projects.FirstOrDefaultAsync(u => u.Id == projectId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var project = await _context.Projects.FirstOrDefaultAsync(u => u.Id == projectId);
 
             if (await IsUserOnProjectAsync(userId, projectId))
             {

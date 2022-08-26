@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker;
+
 public class Program
 {
     public static async Task Main(string[] args)
@@ -46,7 +47,6 @@ public class Program
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 
-
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -70,14 +70,14 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            "default",
+            "{controller=Home}/{action=Index}/{id?}");
         app.MapRazorPages();
 
         // Create instance of our DataUtility and call initial migration
         //var dataService = app.Services.CreateScope().ServiceProvider.GetRequiredService<DataUtility>();
         await DataUtility.ManageDataAsync(app);
-        
+
 
         await app.RunAsync();
     }

@@ -1,5 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
 #nullable disable
 
 using BugTracker.Models;
@@ -11,12 +12,13 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage;
 
 public class TwoFactorAuthenticationModel : PageModel
 {
-    private readonly UserManager<BTUser> _userManager;
-    private readonly SignInManager<BTUser> _signInManager;
     private readonly ILogger<TwoFactorAuthenticationModel> _logger;
+    private readonly SignInManager<BTUser> _signInManager;
+    private readonly UserManager<BTUser> _userManager;
 
     public TwoFactorAuthenticationModel(
-        UserManager<BTUser> userManager, SignInManager<BTUser> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
+        UserManager<BTUser> userManager, SignInManager<BTUser> signInManager,
+        ILogger<TwoFactorAuthenticationModel> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -58,10 +60,7 @@ public class TwoFactorAuthenticationModel : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+        if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 
         HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null;
         Is2faEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
@@ -74,13 +73,11 @@ public class TwoFactorAuthenticationModel : PageModel
     public async Task<IActionResult> OnPostAsync()
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+        if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 
         await _signInManager.ForgetTwoFactorClientAsync();
-        StatusMessage = "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.";
+        StatusMessage =
+            "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.";
         return RedirectToPage();
     }
 }

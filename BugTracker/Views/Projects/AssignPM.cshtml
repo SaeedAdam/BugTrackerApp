@@ -7,13 +7,13 @@
 
 <h1>Project : @Model.Project.Name</h1>
 
-<hr />
+<hr/>
 
 <div class="row">
     <div class="col-md-4">
         <form asp-action="AssignPM" asp-controller="Projects" method="post">
             <input asp-for="Project.Id" hidden=""/>
-            
+
             <p>@Model.Project.Name</p>
 
             <p>@Model.Project.Description</p>
@@ -23,7 +23,7 @@
                 <select asp-for="PMID" class="form-control" asp-items="@Model.PMList">
                     <option></option>
                 </select>
-                
+
                 <input class="btn btn-primary btn-sm" value="Assign" type="submit"/>
             </div>
         </form>
