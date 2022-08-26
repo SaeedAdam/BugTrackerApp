@@ -1,13 +1,13 @@
-﻿using BugTracker.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using BugTracker.Extensions;
+﻿using BugTracker.Extensions;
+using BugTracker.Models;
+using BugTracker.Models.ChartModels;
+using BugTracker.Models.Enums;
 using BugTracker.Models.ViewModels;
 using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using BugTracker.Models.Enums;
-using BugTracker.Models.ChartModels;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace BugTracker.Controllers;
 public class HomeController : Controller
@@ -25,21 +25,21 @@ public class HomeController : Controller
         _projectService = projectService;
     }
 
-    public IActionResult Index()
+    public IActionResult LandingPage()
     {
         return View();
     }
 
     [Authorize]
-    public async Task<IActionResult> Dashboard()
+    public async Task<IActionResult> Index()
     {
         DashboardViewModel model = new();
 
         int companyId = User.Identity.GetCompanyId().Value;
 
         model.Company = await _companyInfoService.GetCompanyInfoByIdAsync(companyId);
-        model.Projects = (await _companyInfoService.GetAllProjectsAsync(companyId)).Where(p=>p.Archived == false).ToList();
-        model.Tickets = model.Projects.SelectMany(p=>p.Tickets).Where(t=>t.Archived == false).ToList();
+        model.Projects = (await _companyInfoService.GetAllProjectsAsync(companyId)).Where(p => p.Archived == false).ToList();
+        model.Tickets = model.Projects.SelectMany(p => p.Tickets).Where(t => t.Archived == false).ToList();
         model.Members = model.Company.Members.ToList();
 
 
@@ -158,5 +158,30 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    public IActionResult Profile()
+    {
+        return View();
+    }
+
+    public IActionResult Icons()
+    {
+        return View();
+    }
+
+    public IActionResult Maps()
+    {
+        return View();
+    }
+
+    public IActionResult Tables()
+    {
+        return View();
+    }
+
+    public IActionResult Upgrade()
+    {
+        return View();
     }
 }

@@ -71,13 +71,13 @@ public class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern: "{controller=Home}/{action=LandingPage}/{id?}");
         app.MapRazorPages();
 
         // Create instance of our DataUtility and call initial migration
         //var dataService = app.Services.CreateScope().ServiceProvider.GetRequiredService<DataUtility>();
         await DataUtility.ManageDataAsync(app);
-        
+
 
         await app.RunAsync();
     }
