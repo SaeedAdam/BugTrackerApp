@@ -9,8 +9,8 @@ namespace BugTracker.Services;
 public class BTTicketService : IBTTicketService
 {
     private readonly ApplicationDbContext _context;
-    private readonly IBTRolesService _rolesService;
     private readonly IBTProjectService _projectService;
+    private readonly IBTRolesService _rolesService;
 
     public BTTicketService(ApplicationDbContext context, IBTRolesService rolesService, IBTProjectService projectService)
     {
@@ -34,16 +34,16 @@ public class BTTicketService : IBTTicketService
     public async Task<Ticket> GetTicketByIdAsync(int ticketId)
     {
         return await _context.Tickets
-                            .Include(t => t.DeveloperUser)
-                            .Include(t => t.OwnerUser)
-                            .Include(t => t.Project)
-                            .Include(t => t.TicketPriority)
-                            .Include(t => t.TicketStatus)
-                            .Include(t => t.TicketType)
-                            .Include(t => t.Comments)
-                            .Include(t => t.Attachments)
-                            .Include(t => t.History)
-                            .FirstOrDefaultAsync(t => t.Id == ticketId);
+            .Include(t => t.DeveloperUser)
+            .Include(t => t.OwnerUser)
+            .Include(t => t.Project)
+            .Include(t => t.TicketPriority)
+            .Include(t => t.TicketStatus)
+            .Include(t => t.TicketType)
+            .Include(t => t.Comments)
+            .Include(t => t.Attachments)
+            .Include(t => t.History)
+            .FirstOrDefaultAsync(t => t.Id == ticketId);
     }
 
     public async Task ArchiveTicketAsync(Ticket ticket)
@@ -94,9 +94,9 @@ public class BTTicketService : IBTTicketService
     {
         try
         {
-            TicketAttachment ticketAttachment = await _context.TicketAttachments
-                                                                .Include(t => t.User)
-                                                                .FirstOrDefaultAsync(t => t.Id == ticketAttachmentId);
+            var ticketAttachment = await _context.TicketAttachments
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.Id == ticketAttachmentId);
 
             return ticketAttachment;
         }
@@ -112,14 +112,14 @@ public class BTTicketService : IBTTicketService
         try
         {
             return await _context.Tickets
-                                .Include(t => t.DeveloperUser)
-                                .Include(t => t.Project)
-                                .Include(t => t.TicketPriority)
-                                .Include(t => t.TicketStatus)
-                                .Include(t => t.TicketType)
-                                .Include(t => t.Attachments)
-                                .AsNoTracking()
-                                .FirstOrDefaultAsync(t => t.Id == ticketId);
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Attachments)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == ticketId);
         }
         catch (Exception e)
         {
@@ -130,7 +130,7 @@ public class BTTicketService : IBTTicketService
 
     public async Task AssignTicketAsync(int ticketId, string userId)
     {
-        Ticket ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
+        var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
 
         if (ticket is not null)
         {
@@ -146,7 +146,7 @@ public class BTTicketService : IBTTicketService
     {
         try
         {
-            List<Ticket> tickets = (await GetAllTicketsByCompanyAsync(companyId)).Where(t => t.Archived).ToList();
+            var tickets = (await GetAllTicketsByCompanyAsync(companyId)).Where(t => t.Archived).ToList();
 
             return tickets;
         }
@@ -158,23 +158,22 @@ public class BTTicketService : IBTTicketService
     }
 
 
-
     public async Task<List<Ticket>> GetAllTicketsByCompanyAsync(int companyId)
     {
         try
         {
-            List<Ticket> tickets = await _context.Projects
+            var tickets = await _context.Projects
                 .Where(p => p.CompanyId == companyId)
                 .SelectMany(p => p.Tickets)
-                    .Include(t => t.Attachments)
-                    .Include(t => t.Comments)
-                    .Include(t => t.DeveloperUser)
-                    .Include(t => t.History)
-                    .Include(t => t.OwnerUser)
-                    .Include(t => t.TicketPriority)
-                    .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType)
-                    .Include(t => t.Project)
+                .Include(t => t.Attachments)
+                .Include(t => t.Comments)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.History)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Project)
                 .ToListAsync();
 
             return tickets;
@@ -188,22 +187,22 @@ public class BTTicketService : IBTTicketService
 
     public async Task<List<Ticket>> GetAllTicketsByPriorityAsync(int companyId, string priorityName)
     {
-        int priorityId = (await LookupTicketPriorityIdAsync(priorityName)).Value;
+        var priorityId = (await LookupTicketPriorityIdAsync(priorityName)).Value;
 
         try
         {
-            List<Ticket> tickets = await _context.Projects
+            var tickets = await _context.Projects
                 .Where(p => p.CompanyId == companyId)
                 .SelectMany(p => p.Tickets)
-                    .Include(t => t.Attachments)
-                    .Include(t => t.Comments)
-                    .Include(t => t.DeveloperUser)
-                    .Include(t => t.History)
-                    .Include(t => t.OwnerUser)
-                    .Include(t => t.TicketPriority)
-                    .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType)
-                    .Include(t => t.Project)
+                .Include(t => t.Attachments)
+                .Include(t => t.Comments)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.History)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Project)
                 .Where(t => t.TicketPriorityId == priorityId)
                 .ToListAsync();
 
@@ -218,11 +217,11 @@ public class BTTicketService : IBTTicketService
 
     public async Task<List<Ticket>> GetAllTicketsByStatusAsync(int companyId, string statusName)
     {
-        int statusId = (await LookupTicketStatusIdAsync(statusName)).Value;
+        var statusId = (await LookupTicketStatusIdAsync(statusName)).Value;
 
         try
         {
-            List<Ticket> tickets = await _context.Projects
+            var tickets = await _context.Projects
                 .Where(p => p.CompanyId == companyId)
                 .SelectMany(p => p.Tickets)
                 .Include(t => t.Attachments)
@@ -248,11 +247,11 @@ public class BTTicketService : IBTTicketService
 
     public async Task<List<Ticket>> GetAllTicketsByTypeAsync(int companyId, string typeName)
     {
-        int typeId = (await LookupTicketTypeIdAsync(typeName)).Value;
+        var typeId = (await LookupTicketTypeIdAsync(typeName)).Value;
 
         try
         {
-            List<Ticket> tickets = await _context.Projects
+            var tickets = await _context.Projects
                 .Where(p => p.CompanyId == companyId)
                 .SelectMany(p => p.Tickets)
                 .Include(t => t.Attachments)
@@ -277,18 +276,14 @@ public class BTTicketService : IBTTicketService
     }
 
 
-
     public async Task<BTUser> GetTicketDeveloperAsync(int ticketId, int companyId)
     {
         BTUser developer = new();
 
         try
         {
-            Ticket ticket = (await GetAllTicketsByCompanyAsync(companyId)).FirstOrDefault(t => t.Id == ticketId);
-            if (ticket?.DeveloperUserId is not null)
-            {
-                developer = ticket.DeveloperUser;
-            }
+            var ticket = (await GetAllTicketsByCompanyAsync(companyId)).FirstOrDefault(t => t.Id == ticketId);
+            if (ticket?.DeveloperUserId is not null) developer = ticket.DeveloperUser;
 
             return developer;
         }
@@ -306,21 +301,14 @@ public class BTTicketService : IBTTicketService
         try
         {
             if (role == Roles.Admin.ToString())
-            {
                 tickets = await GetAllTicketsByCompanyAsync(companyId);
-            }
             else if (role == Roles.Developer.ToString())
-            {
-                tickets = (await GetAllTicketsByCompanyAsync(companyId)).Where(t => t.DeveloperUserId == userId).ToList();
-            }
+                tickets = (await GetAllTicketsByCompanyAsync(companyId)).Where(t => t.DeveloperUserId == userId)
+                    .ToList();
             else if (role == Roles.Submitter.ToString())
-            {
                 tickets = (await GetAllTicketsByCompanyAsync(companyId)).Where(t => t.OwnerUserId == userId).ToList();
-            }
             else if (role == Roles.ProjectManager.ToString())
-            {
                 tickets = await GetTicketsByUserIdAsync(userId, companyId);
-            }
 
             return tickets;
         }
@@ -333,37 +321,29 @@ public class BTTicketService : IBTTicketService
 
     public async Task<List<Ticket>> GetTicketsByUserIdAsync(string userId, int companyId)
     {
-        BTUser btUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        var btUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         List<Ticket> tickets = new();
 
         try
         {
             if (await _rolesService.IsUserInRoleAsync(btUser, Roles.Admin.ToString()))
-            {
                 tickets = (await _projectService.GetAllProjectsByCompanyAsync(companyId))
                     .SelectMany(p => p.Tickets)
                     .ToList();
-            }
             else if (await _rolesService.IsUserInRoleAsync(btUser, Roles.Developer.ToString()))
-            {
                 tickets = (await _projectService.GetAllProjectsByCompanyAsync(companyId))
                     .SelectMany(p => p.Tickets)
                     .Where(t => t.DeveloperUserId == userId || t.OwnerUserId == userId)
                     .ToList();
-            }
             else if (await _rolesService.IsUserInRoleAsync(btUser, Roles.Submitter.ToString()))
-            {
                 tickets = (await _projectService.GetAllProjectsByCompanyAsync(companyId))
                     .SelectMany(p => p.Tickets)
                     .Where(t => t.OwnerUserId == userId)
                     .ToList();
-            }
             else if (await _rolesService.IsUserInRoleAsync(btUser, Roles.ProjectManager.ToString()))
-            {
                 tickets = (await _projectService.GetUserProjectsAsync(userId))
                     .SelectMany(p => p.Tickets)
                     .ToList();
-            }
 
             return tickets;
         }
@@ -374,7 +354,8 @@ public class BTTicketService : IBTTicketService
         }
     }
 
-    public async Task<List<Ticket>> GetProjectTicketsByRoleAsync(string role, string userId, int projectId, int companyId)
+    public async Task<List<Ticket>> GetProjectTicketsByRoleAsync(string role, string userId, int projectId,
+        int companyId)
     {
         List<Ticket> tickets = new();
 
@@ -420,7 +401,7 @@ public class BTTicketService : IBTTicketService
 
     public async Task<List<Ticket>> GetUnassignedTicketsAsync(int companyId)
     {
-        List<Ticket> tickets = (await GetAllTicketsByCompanyAsync(companyId))
+        var tickets = (await GetAllTicketsByCompanyAsync(companyId))
             .Where(t => string.IsNullOrEmpty(t.DeveloperUserId))
             .ToList();
 
@@ -429,21 +410,21 @@ public class BTTicketService : IBTTicketService
 
     public async Task<int?> LookupTicketPriorityIdAsync(string priorityName)
     {
-        int priorityId = (await _context.TicketPriorities.FirstOrDefaultAsync(tp => tp.Name == priorityName)).Id;
+        var priorityId = (await _context.TicketPriorities.FirstOrDefaultAsync(tp => tp.Name == priorityName)).Id;
 
         return priorityId;
     }
 
     public async Task<int?> LookupTicketStatusIdAsync(string statusName)
     {
-        int statusId = (await _context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == statusName)).Id;
+        var statusId = (await _context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == statusName)).Id;
 
         return statusId;
     }
 
     public async Task<int?> LookupTicketTypeIdAsync(string typeName)
     {
-        int TypeId = (await _context.TicketTypes.FirstOrDefaultAsync(tt => tt.Name == typeName)).Id;
+        var TypeId = (await _context.TicketTypes.FirstOrDefaultAsync(tt => tt.Name == typeName)).Id;
 
         return TypeId;
     }

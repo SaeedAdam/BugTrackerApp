@@ -1,5 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
 #nullable disable
 
 using BugTracker.Models;
@@ -12,8 +13,8 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage;
 
 public class ExternalLoginsModel : PageModel
 {
-    private readonly UserManager<BTUser> _userManager;
     private readonly SignInManager<BTUser> _signInManager;
+    private readonly UserManager<BTUser> _userManager;
     private readonly IUserStore<BTUser> _userStore;
 
     public ExternalLoginsModel(
@@ -54,10 +55,7 @@ public class ExternalLoginsModel : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+        if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 
         CurrentLogins = await _userManager.GetLoginsAsync(user);
         OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
@@ -66,9 +64,7 @@ public class ExternalLoginsModel : PageModel
 
         string passwordHash = null;
         if (_userStore is IUserPasswordStore<BTUser> userPasswordStore)
-        {
             passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
-        }
 
         ShowRemoveButton = passwordHash != null || CurrentLogins.Count > 1;
         return Page();
@@ -77,10 +73,7 @@ public class ExternalLoginsModel : PageModel
     public async Task<IActionResult> OnPostRemoveLoginAsync(string loginProvider, string providerKey)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+        if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 
         var result = await _userManager.RemoveLoginAsync(user, loginProvider, providerKey);
         if (!result.Succeeded)
@@ -100,30 +93,27 @@ public class ExternalLoginsModel : PageModel
         await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
         // Request a redirect to the external login provider to link a login for the current user
-        var redirectUrl = Url.Page("./ExternalLogins", pageHandler: "LinkLoginCallback");
-        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
+        var redirectUrl = Url.Page("./ExternalLogins", "LinkLoginCallback");
+        var properties =
+            _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl,
+                _userManager.GetUserId(User));
         return new ChallengeResult(provider, properties);
     }
 
     public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+        if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 
         var userId = await _userManager.GetUserIdAsync(user);
         var info = await _signInManager.GetExternalLoginInfoAsync(userId);
-        if (info == null)
-        {
-            throw new InvalidOperationException($"Unexpected error occurred loading external login info.");
-        }
+        if (info == null) throw new InvalidOperationException("Unexpected error occurred loading external login info.");
 
         var result = await _userManager.AddLoginAsync(user, info);
         if (!result.Succeeded)
         {
-            StatusMessage = "The external login was not added. External logins can only be associated with one account.";
+            StatusMessage =
+                "The external login was not added. External logins can only be associated with one account.";
             return RedirectToPage();
         }
 

@@ -18,7 +18,7 @@
                     <form method="post" asp-action="AssignDeveloper" asp-controller="Tickets">
                         <input asp-for="Ticket.Id" hidden=""/>
                         <p> Description: @Model.Ticket.Description</p>
-                        
+
                         <div calss="form-group">
                             <label class="control-label">Select Developers</label>
                             <div>
@@ -26,7 +26,7 @@
                                     <option></option>
                                 </select>
                             </div>
-                            
+
                         </div>
                         <div class="form-group mt-3">
                             <input type="submit" value="Assign" class="btn btn-primary"/>
@@ -40,4 +40,3 @@
         <a class="btn btn-dark mt-2" asp-action="UnassignedTickets" asp-controller="Tickets">Unassigned Tickets</a>
     </div>
 </div>
-

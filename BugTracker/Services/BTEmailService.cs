@@ -15,6 +15,7 @@ public class BTEmailService : IEmailSender
     {
         _mailSettings = mailSettings.Value;
     }
+
     public async Task SendEmailAsync(string emailTo, string subject, string htmlMessage)
     {
         MimeMessage email = new();
@@ -23,7 +24,7 @@ public class BTEmailService : IEmailSender
         email.To.Add(MailboxAddress.Parse(emailTo));
         email.Subject = subject;
 
-        var builder = new BodyBuilder()
+        var builder = new BodyBuilder
         {
             HtmlBody = htmlMessage
         };

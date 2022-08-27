@@ -4,7 +4,7 @@ namespace BugTracker.Services;
 
 public class BTFileService : IBTFileService
 {
-    private readonly string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
+    private readonly string[] suffixes = {"Bytes", "KB", "MB", "GB", "TB", "PB"};
 
     public async Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file)
     {
@@ -46,7 +46,7 @@ public class BTFileService : IBTFileService
 
     public string GetFileIcon(string file)
     {
-        string fileImage = "default";
+        var fileImage = "default";
 
         if (!string.IsNullOrWhiteSpace(file))
         {
@@ -59,7 +59,7 @@ public class BTFileService : IBTFileService
 
     public string FormatFileSize(long bytes)
     {
-        int counter = 0;
+        var counter = 0;
         decimal fileSize = bytes;
         while (Math.Round(fileSize / 1024) >= 1)
         {

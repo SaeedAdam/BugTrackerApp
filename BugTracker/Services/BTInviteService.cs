@@ -16,12 +16,9 @@ public class BTInviteService : IBTInviteService
 
     public async Task<bool> AcceptInviteAsync(Guid? token, string userId, int companyId)
     {
-        Invite invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
+        var invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
 
-        if (invite is null)
-        {
-            return false;
-        }
+        if (invite is null) return false;
 
         try
         {
@@ -58,7 +55,7 @@ public class BTInviteService : IBTInviteService
         try
         {
             return await _context.Invites.Where(i => i.CompanyId == companyId)
-                                        .AnyAsync(i => i.CompanyToken == token && i.InviteeEmail == email);
+                .AnyAsync(i => i.CompanyToken == token && i.InviteeEmail == email);
         }
         catch (Exception e)
         {
@@ -71,11 +68,11 @@ public class BTInviteService : IBTInviteService
     {
         try
         {
-            Invite invite = await _context.Invites.Where(i => i.CompanyId == companyId)
-                    .Include(i => i.Company)
-                    .Include(i => i.Project)
-                    .Include(i => i.Invitor)
-                    .FirstOrDefaultAsync(i => i.Id == inviteId);
+            var invite = await _context.Invites.Where(i => i.CompanyId == companyId)
+                .Include(i => i.Company)
+                .Include(i => i.Project)
+                .Include(i => i.Invitor)
+                .FirstOrDefaultAsync(i => i.Id == inviteId);
 
             return invite;
         }
@@ -90,7 +87,7 @@ public class BTInviteService : IBTInviteService
     {
         try
         {
-            Invite invite = await _context.Invites.Where(i => i.CompanyId == companyId)
+            var invite = await _context.Invites.Where(i => i.CompanyId == companyId)
                 .Include(i => i.Company)
                 .Include(i => i.Project)
                 .Include(i => i.Invitor)
@@ -107,16 +104,13 @@ public class BTInviteService : IBTInviteService
 
     public async Task<bool> ValidateInviteCodeAsync(Guid? token)
     {
-        if (token is null)
-        {
-            return false;
-        }
+        if (token is null) return false;
 
-        bool result = false;
+        var result = false;
 
         try
         {
-            Invite invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
+            var invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
 
             if (invite is not null)
             {
@@ -125,12 +119,9 @@ public class BTInviteService : IBTInviteService
 
                 // Custom validation of invite based on the date it was issued 
                 // In this we are allowing an invite to be valid for 7 days
-                bool validDate = (DateTime.UtcNow - inviteDate).TotalDays <= 7;
+                var validDate = (DateTime.UtcNow - inviteDate).TotalDays <= 7;
 
-                if (validDate)
-                {
-                    result = invite.IsValid;
-                }
+                if (validDate) result = invite.IsValid;
             }
 
             return result;

@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BugTracker.Models.Project>
-@using BugTracker.Models.Enums
+﻿@using Microsoft.AspNetCore.Identity
 @using BugTracker.Services.Interfaces
-@using Microsoft.AspNetCore.Identity
+@using BugTracker.Models.Enums
+@model IEnumerable<Project>
 
 
 @inject UserManager<BTUser> UserManager
@@ -10,7 +10,7 @@
 
 @{
     ViewData["Title"] = "All Projects";
-    BTUser btUser = await UserManager.GetUserAsync(User);
+    var btUser = await UserManager.GetUserAsync(User);
 }
 
 <h1>All Projects</h1>
@@ -23,42 +23,43 @@
 }
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFileName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFileData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFileContentType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Archived)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Company)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProjectPriority)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageFileName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageFileData)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageFileContentType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Archived)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Company)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProjectPriority)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -91,11 +92,11 @@
                 @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                
-                
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+
                 @{
-                    bool isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
+                    var isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
                 }
 
                 @if (User.IsInRole(nameof(Roles.Admin)) || isProjectPM)
@@ -113,6 +114,6 @@
                 }
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

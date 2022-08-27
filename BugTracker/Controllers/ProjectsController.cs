@@ -1,5 +1,4 @@
-﻿using BugTracker.Data;
-using BugTracker.Extensions;
+﻿using BugTracker.Extensions;
 using BugTracker.Models;
 using BugTracker.Models.Enums;
 using BugTracker.Models.ViewModels;
@@ -15,14 +14,15 @@ namespace BugTracker.Controllers;
 [Authorize]
 public class ProjectsController : Controller
 {
-    private readonly IBTRolesService _rolesService;
-    private readonly IBTLookupService _lookupsService;
-    private readonly IBTFileService _fileService;
-    private readonly IBTProjectService _projectService;
-    private readonly UserManager<BTUser> _userManager;
     private readonly IBTCompanyInfoService _companyInfoService;
+    private readonly IBTFileService _fileService;
+    private readonly IBTLookupService _lookupsService;
+    private readonly IBTProjectService _projectService;
+    private readonly IBTRolesService _rolesService;
+    private readonly UserManager<BTUser> _userManager;
 
-    public ProjectsController(IBTRolesService rolesService, IBTLookupService lookupsService, IBTFileService fileService, IBTProjectService projectService, UserManager<BTUser> userManager, IBTCompanyInfoService companyInfoService)
+    public ProjectsController(IBTRolesService rolesService, IBTLookupService lookupsService, IBTFileService fileService,
+        IBTProjectService projectService, UserManager<BTUser> userManager, IBTCompanyInfoService companyInfoService)
     {
         _rolesService = rolesService;
         _lookupsService = lookupsService;
@@ -34,7 +34,7 @@ public class ProjectsController : Controller
 
     public async Task<IActionResult> MyProjects()
     {
-        string userId = _userManager.GetUserId(User);
+        var userId = _userManager.GetUserId(User);
 
         var projects = await _projectService.GetUserProjectsAsync(userId);
 
@@ -43,24 +43,21 @@ public class ProjectsController : Controller
 
     public async Task<IActionResult> AllProjects()
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         List<Project> projects = new();
 
         if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
-        {
             projects = await _companyInfoService.GetAllProjectsAsync(companyId);
-        }
         else
-        {
             projects = await _projectService.GetAllProjectsByCompanyAsync(companyId);
-        }
 
         return View(projects);
     }
+
     public async Task<IActionResult> ArchivedProjects()
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         var projects = await _projectService.GetArchivedProjectsByCompanyAsync(companyId);
 
@@ -70,9 +67,9 @@ public class ProjectsController : Controller
     [Authorize(Roles = nameof(Roles.Admin))]
     public async Task<IActionResult> UnassignedProjects()
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
-        List<Project> projects = await _projectService.GetUnassignedProjectsAsync(companyId);
+        var projects = await _projectService.GetUnassignedProjectsAsync(companyId);
 
         return View(projects);
     }
@@ -81,12 +78,13 @@ public class ProjectsController : Controller
     [HttpGet]
     public async Task<IActionResult> AssignPM(int id)
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         AssignPMViewModel model = new();
 
         model.Project = await _projectService.GetProjectByIdAsync(id, companyId);
-        model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(Roles.ProjectManager), companyId), "Id", "FullName");
+        model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(Roles.ProjectManager), companyId),
+            "Id", "FullName");
 
         return View(model);
     }
@@ -112,16 +110,16 @@ public class ProjectsController : Controller
     {
         ProjectsMemberViewModel model = new();
 
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         model.Project = await _projectService.GetProjectByIdAsync(id, companyId);
 
-        List<BTUser> developers = await _rolesService.GetUsersInRoleAsync(nameof(Roles.Developer), companyId);
-        List<BTUser> submitters = await _rolesService.GetUsersInRoleAsync(nameof(Roles.Submitter), companyId);
+        var developers = await _rolesService.GetUsersInRoleAsync(nameof(Roles.Developer), companyId);
+        var submitters = await _rolesService.GetUsersInRoleAsync(nameof(Roles.Submitter), companyId);
 
-        List<BTUser> companyMembers = developers.Concat(submitters).ToList();
+        var companyMembers = developers.Concat(submitters).ToList();
 
-        List<string> projectsMembers = model.Project.Members.Select(m=>m.Id).ToList();
+        var projectsMembers = model.Project.Members.Select(m => m.Id).ToList();
 
 
         model.Users = new MultiSelectList(companyMembers, "Id", "FullName", projectsMembers);
@@ -136,46 +134,36 @@ public class ProjectsController : Controller
     {
         if (model.SelectedUsers is not null)
         {
-            List<string> membersId = (await _projectService.GetAllProjectMembersExceptPMAsync(model.Project.Id))
+            var membersId = (await _projectService.GetAllProjectMembersExceptPMAsync(model.Project.Id))
                 .Select(m => m.Id).ToList();
 
 
             // Remove current members
-            foreach (string member in membersId)
-            {
+            foreach (var member in membersId)
                 await _projectService.RemoveUserFromProjectAsync(member, model.Project.Id);
-            }
 
             // Add new members
             foreach (var member in model.SelectedUsers)
-            {
                 await _projectService.AddUserToProjectAsync(member, model.Project.Id);
-            }
 
-            return RedirectToAction(nameof(Details), new { id = model.Project.Id });
+            return RedirectToAction(nameof(Details), new {id = model.Project.Id});
         }
 
-        return RedirectToAction(nameof(AssignMembers), new { projectId = model.Project.Id });
+        return RedirectToAction(nameof(AssignMembers), new {projectId = model.Project.Id});
     }
-    
+
 
     // GET: Projects/Details/5
     public async Task<IActionResult> Details(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
+        if (id == null) return NotFound();
 
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
 
         var project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
 
-        if (project == null)
-        {
-            return NotFound();
-        }
+        if (project == null) return NotFound();
 
         return View(project);
     }
@@ -184,7 +172,7 @@ public class ProjectsController : Controller
     [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Create()
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         AddProjectWithPMViewModel model = new();
 
@@ -208,7 +196,7 @@ public class ProjectsController : Controller
     {
         if (model is not null)
         {
-            int companyId = User.Identity.GetCompanyId().Value;
+            var companyId = User.Identity.GetCompanyId().Value;
 
             try
             {
@@ -226,9 +214,7 @@ public class ProjectsController : Controller
 
                 // Add PM if one was chosen
                 if (!string.IsNullOrEmpty(model.PMId))
-                {
                     await _projectService.AddProjectManagerAsync(model.PMId, model.Project.Id);
-                }
             }
             catch (Exception e)
             {
@@ -247,14 +233,15 @@ public class ProjectsController : Controller
     [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Edit(int? id)
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         AddProjectWithPMViewModel model = new();
 
         model.Project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
 
         // Load SelectList with data ie. PMList & PriorityList 
-        model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(Roles.ProjectManager.ToString(), companyId),
+        model.PMList = new SelectList(
+            await _rolesService.GetUsersInRoleAsync(Roles.ProjectManager.ToString(), companyId),
             "Id", "FullName");
         model.PriorityList = new SelectList(await _lookupsService.GetProjectPrioritiesAsync(), "Id", "Name");
 
@@ -270,7 +257,6 @@ public class ProjectsController : Controller
     public async Task<IActionResult> Edit(AddProjectWithPMViewModel model)
     {
         if (model is not null)
-        {
             try
             {
                 if (model.Project.ImageFormFile is not null)
@@ -286,25 +272,17 @@ public class ProjectsController : Controller
 
                 // Add PM if one was chosen
                 if (!string.IsNullOrEmpty(model.PMId))
-                {
                     await _projectService.AddProjectManagerAsync(model.PMId, model.Project.Id);
-                }
 
                 return RedirectToAction("MyProjects");
-
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (! await ProjectExists(model.Project.Id))
-                {
-                    return NotFound();
-                }
-  
+                if (!await ProjectExists(model.Project.Id)) return NotFound();
+
                 Console.WriteLine("Error Editing project.");
                 throw;
-
             }
-        }
 
         return RedirectToAction("Edit");
     }
@@ -313,39 +291,30 @@ public class ProjectsController : Controller
     [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Archive(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
+        if (id == null) return NotFound();
 
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         Project project = null;
 
         if (User.IsInRole(Roles.Admin.ToString()))
-        {
             project = await _projectService.GetProjectByIdForAdminAsync(id.Value);
-        }
         else
-        {
             project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
-        }
 
-        if (project == null)
-        {
-            return NotFound();
-        }
+        if (project == null) return NotFound();
 
         return View(project);
     }
 
     // POST: Projects/Archive/5
     [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
-    [HttpPost, ActionName("Archive")]
+    [HttpPost]
+    [ActionName("Archive")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ArchiveConfirmed(int id)
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         var project = await _projectService.GetProjectByIdAsync(id, companyId);
 
@@ -359,39 +328,30 @@ public class ProjectsController : Controller
     [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
     public async Task<IActionResult> Restore(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
+        if (id == null) return NotFound();
 
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         Project project = null;
 
         if (User.IsInRole(Roles.Admin.ToString()))
-        {
             project = await _projectService.GetProjectByIdForAdminAsync(id.Value);
-        }
         else
-        {
             project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
-        }
 
-        if (project == null)
-        {
-            return NotFound();
-        }
+        if (project == null) return NotFound();
 
         return View(project);
     }
 
     // POST: Projects/Restore/5
     [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
-    [HttpPost, ActionName("Restore")]
+    [HttpPost]
+    [ActionName("Restore")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RestoreConfirmed(int id)
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
         var project = await _projectService.GetProjectByIdAsync(id, companyId);
 
@@ -402,9 +362,8 @@ public class ProjectsController : Controller
 
     private async Task<bool> ProjectExists(int id)
     {
-        int companyId = User.Identity.GetCompanyId().Value;
+        var companyId = User.Identity.GetCompanyId().Value;
 
-        return (await _projectService.GetAllProjectsByCompanyAsync(companyId)).Any(p=>p.Id == id);
+        return (await _projectService.GetAllProjectsByCompanyAsync(companyId)).Any(p => p.Id == id);
     }
-
 }

@@ -149,12 +149,13 @@ public class BTTicketHistoryService : IBTTicketHistory
             await _context.SaveChangesAsync();
         }
     }
+
     public async Task AddHistoryAsync(int ticketId, string model, string userId)
     {
         try
         {
-            Ticket ticket = await _context.Tickets.FindAsync(ticketId);
-            string description = model.ToLower().Replace("ticket", "");
+            var ticket = await _context.Tickets.FindAsync(ticketId);
+            var description = model.ToLower().Replace("ticket", "");
             description = $"New {description} added to ticket: {ticket.Title}";
 
             TicketHistory history = new()
@@ -180,29 +181,29 @@ public class BTTicketHistoryService : IBTTicketHistory
 
     public async Task<List<TicketHistory>> GetProjectTicketsHistoriesAsync(int projectId, int companyId)
     {
-        Project project = await _context.Projects.Where(p => p.CompanyId == companyId)
-                                                .Include(p => p.Tickets)
-                                                .ThenInclude(t => t.History)
-                                                .ThenInclude(h => h.User)
-                                                .FirstOrDefaultAsync(p => p.Id == projectId);
+        var project = await _context.Projects.Where(p => p.CompanyId == companyId)
+            .Include(p => p.Tickets)
+            .ThenInclude(t => t.History)
+            .ThenInclude(h => h.User)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
 
-        List<TicketHistory> ticketHistory = project.Tickets.SelectMany(t => t.History).ToList();
+        var ticketHistory = project.Tickets.SelectMany(t => t.History).ToList();
 
         return ticketHistory;
     }
 
     public async Task<List<TicketHistory>> GetCompanyTicketsHistoriesAsync(int companyId)
     {
-        List<Project> projects = (await _context.Companies
-                                                .Include(c => c.Projects)
-                                                    .ThenInclude(p => p.Tickets)
-                                                        .ThenInclude(t => t.History)
-                                                            .ThenInclude(h => h.User)
-                                                .FirstOrDefaultAsync(c => c.Id == companyId)).Projects.ToList();
+        var projects = (await _context.Companies
+            .Include(c => c.Projects)
+            .ThenInclude(p => p.Tickets)
+            .ThenInclude(t => t.History)
+            .ThenInclude(h => h.User)
+            .FirstOrDefaultAsync(c => c.Id == companyId)).Projects.ToList();
 
-        List<Ticket> tickets = projects.SelectMany(p => p.Tickets).ToList();
+        var tickets = projects.SelectMany(p => p.Tickets).ToList();
 
-        List<TicketHistory> ticketHistories = tickets.SelectMany(t => t.History).ToList();
+        var ticketHistories = tickets.SelectMany(t => t.History).ToList();
 
         return ticketHistories;
     }

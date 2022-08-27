@@ -5,6 +5,7 @@ namespace BugTracker.Extensions;
 public class MaxFileSizeAttribute : ValidationAttribute
 {
     private readonly int _maxFileSize;
+
     public MaxFileSizeAttribute(int maxFileSize)
     {
         _maxFileSize = maxFileSize;
@@ -16,12 +17,8 @@ public class MaxFileSizeAttribute : ValidationAttribute
     {
         var file = value as IFormFile;
         if (file != null)
-        {
             if (file.Length > _maxFileSize)
-            {
                 return new ValidationResult(GetErrorMessage());
-            }
-        }
 
 
         return ValidationResult.Success;
@@ -37,6 +34,7 @@ public class MaxFileSizeAttribute : ValidationAttribute
 public class AllowedExtensionsAttribute : ValidationAttribute
 {
     private readonly string[] _extensions;
+
     public AllowedExtensionsAttribute(string[] extensions)
     {
         _extensions = extensions;
@@ -50,10 +48,7 @@ public class AllowedExtensionsAttribute : ValidationAttribute
         if (file != null)
         {
             var extension = Path.GetExtension(file.FileName);
-            if (!_extensions.Contains(extension.ToLower()))
-            {
-                return new ValidationResult(GetErrorMessage(extension));
-            }
+            if (!_extensions.Contains(extension.ToLower())) return new ValidationResult(GetErrorMessage(extension));
         }
 
 

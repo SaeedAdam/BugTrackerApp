@@ -18,17 +18,15 @@ public class InvitesController : Controller
     // GET: Invites
     public async Task<IActionResult> Index()
     {
-        var applicationDbContext = _context.Invites.Include(i => i.Company).Include(i => i.Invitee).Include(i => i.Invitor).Include(i => i.Project);
+        var applicationDbContext = _context.Invites.Include(i => i.Company).Include(i => i.Invitee)
+            .Include(i => i.Invitor).Include(i => i.Project);
         return View(await applicationDbContext.ToListAsync());
     }
 
     // GET: Invites/Details/5
     public async Task<IActionResult> Details(int? id)
     {
-        if (id == null || _context.Invites == null)
-        {
-            return NotFound();
-        }
+        if (id == null || _context.Invites == null) return NotFound();
 
         var invite = await _context.Invites
             .Include(i => i.Company)
@@ -36,10 +34,7 @@ public class InvitesController : Controller
             .Include(i => i.Invitor)
             .Include(i => i.Project)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (invite == null)
-        {
-            return NotFound();
-        }
+        if (invite == null) return NotFound();
 
         return View(invite);
     }
@@ -59,7 +54,10 @@ public class InvitesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,InviteDate,JoinDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")] Invite invite)
+    public async Task<IActionResult> Create(
+        [Bind(
+            "Id,InviteDate,JoinDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")]
+        Invite invite)
     {
         if (ModelState.IsValid)
         {
@@ -67,6 +65,7 @@ public class InvitesController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
         ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", invite.CompanyId);
         ViewData["InviteeId"] = new SelectList(_context.Users, "Id", "Id", invite.InviteeId);
         ViewData["InvitorId"] = new SelectList(_context.Users, "Id", "Id", invite.InvitorId);
@@ -77,16 +76,10 @@ public class InvitesController : Controller
     // GET: Invites/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
-        if (id == null || _context.Invites == null)
-        {
-            return NotFound();
-        }
+        if (id == null || _context.Invites == null) return NotFound();
 
         var invite = await _context.Invites.FindAsync(id);
-        if (invite == null)
-        {
-            return NotFound();
-        }
+        if (invite == null) return NotFound();
         ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", invite.CompanyId);
         ViewData["InviteeId"] = new SelectList(_context.Users, "Id", "Id", invite.InviteeId);
         ViewData["InvitorId"] = new SelectList(_context.Users, "Id", "Id", invite.InvitorId);
@@ -99,12 +92,12 @@ public class InvitesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,InviteDate,JoinDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")] Invite invite)
+    public async Task<IActionResult> Edit(int id,
+        [Bind(
+            "Id,InviteDate,JoinDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")]
+        Invite invite)
     {
-        if (id != invite.Id)
-        {
-            return NotFound();
-        }
+        if (id != invite.Id) return NotFound();
 
         if (ModelState.IsValid)
         {
@@ -116,16 +109,13 @@ public class InvitesController : Controller
             catch (DbUpdateConcurrencyException)
             {
                 if (!InviteExists(invite.Id))
-                {
                     return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
+
             return RedirectToAction(nameof(Index));
         }
+
         ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", invite.CompanyId);
         ViewData["InviteeId"] = new SelectList(_context.Users, "Id", "Id", invite.InviteeId);
         ViewData["InvitorId"] = new SelectList(_context.Users, "Id", "Id", invite.InvitorId);
@@ -136,10 +126,7 @@ public class InvitesController : Controller
     // GET: Invites/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
-        if (id == null || _context.Invites == null)
-        {
-            return NotFound();
-        }
+        if (id == null || _context.Invites == null) return NotFound();
 
         var invite = await _context.Invites
             .Include(i => i.Company)
@@ -147,28 +134,20 @@ public class InvitesController : Controller
             .Include(i => i.Invitor)
             .Include(i => i.Project)
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (invite == null)
-        {
-            return NotFound();
-        }
+        if (invite == null) return NotFound();
 
         return View(invite);
     }
 
     // POST: Invites/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost]
+    [ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        if (_context.Invites == null)
-        {
-            return Problem("Entity set 'ApplicationDbContext.Invites'  is null.");
-        }
+        if (_context.Invites == null) return Problem("Entity set 'ApplicationDbContext.Invites'  is null.");
         var invite = await _context.Invites.FindAsync(id);
-        if (invite != null)
-        {
-            _context.Invites.Remove(invite);
-        }
+        if (invite != null) _context.Invites.Remove(invite);
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
