@@ -1,4 +1,6 @@
-﻿public interface IBTImageService
+﻿namespace BugTracker.Services.Interfaces;
+
+public interface IBTImageService
 {
     Task<byte[]> EncodeImageAsync(IFormFile file);
     Task<byte[]> EncodeImageAsync(string fileName);

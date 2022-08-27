@@ -1,4 +1,9 @@
-﻿public class BTBasicImageService : IBTImageService
+﻿
+using BugTracker.Services.Interfaces;
+
+namespace BugTracker.Services;
+
+public class BTBasicImageService : IBTImageService
 {
     public async Task<byte[]> EncodeImageAsync(IFormFile file)
     {

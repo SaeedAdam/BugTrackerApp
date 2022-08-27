@@ -1,0 +1,15 @@
+﻿
+@using Microsoft.Extensions.Options
+@using BugTracker.Infrastructure.AppSettingsModels
+
+@inject IOptions<ScriptTags> OptionsScriptTags
+
+@if (!string.IsNullOrWhiteSpace(OptionsScriptTags.Value?.GoogleTagManager))
+{
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=@OptionsScriptTags.Value.GoogleTagManager"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+}
