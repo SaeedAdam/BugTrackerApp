@@ -71,7 +71,7 @@ public class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=LandingPage}/{id?}");
+            pattern: "{controller=Home}/{action=Default}/{id?}");
         app.MapRazorPages();
 
         // Create instance of our DataUtility and call initial migration

@@ -25,7 +25,7 @@ public class HomeController : Controller
         _projectService = projectService;
     }
 
-    public IActionResult LandingPage()
+    public IActionResult Default()
     {
         return View();
     }
@@ -160,6 +160,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
+    [Authorize]
     public IActionResult Profile()
     {
         return View();

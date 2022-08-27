@@ -6,75 +6,140 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr/>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control mb-2" autocomplete="username" aria-required="true"/>
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+<!-- Table -->
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-transparent pb-5">
+                <div class="text-muted text-center mt-2 mb-4">
+                    <small>Sign up with</small>
+                </div>
+                <div class="text-center">
+                    <a href="#" class="btn btn-neutral btn-icon mr-4">
+                        <span class="btn-inner--icon">
+                            <img src="~/img/icons/common/github.svg">
+                        </span>
+                        <span class="btn-inner--text">Github</span>
+                    </a>
+                    <a href="#" class="btn btn-neutral btn-icon">
+                        <span class="btn-inner--icon">
+                            <img src="~/img/icons/common/google.svg">
+                        </span>
+                        <span class="btn-inner--text">Google</span>
+                    </a>
+                </div>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.FirstName" class="form-control mb-2" autocomplete="firstname" aria-required="true"/>
-                <label asp-for="Input.FirstName"></label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.LastName" class="form-control mb-2" autocomplete="lastname" aria-required="true"/>
-                <label asp-for="Input.LastName"></label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control mb-2" autocomplete="new-password" aria-required="true"/>
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control mb-2" autocomplete="new-password" aria-required="true"/>
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr/>
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this
-                            <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                article
-                                about setting up this ASP.NET application to support logging in via external services
-                            </a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
+
+            <div class="card-body px-lg-5 py-lg-5">
+                <div class="text-center text-muted mb-4">
+                    <small>Or sign up with credentials</small>
+                </div>
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post" role="form">
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty] != null)
+                    {
+                        @foreach (var error in @ViewData.ModelState[string.Empty]?.Errors)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <span>@error.ErrorMessage</span>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        }
+                    }
+                    <div class="form-group">
+                        <div class="input-group input-group-alternative mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-hat-3"></i>
+                                </span>
+                            </div>
+                            <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" type="text" required />
                         </div>
-                    </form>
-                }
-            }
-        </section>
+                        <span asp-validation-for="Input.FirstName" class="invalid-feedback" style="display: block"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-alternative mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-hat-3"></i>
+                                </span>
+                            </div>
+                            <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" type="text" required />
+                        </div>
+                        <span asp-validation-for="Input.LastName" class="invalid-feedback" style="display: block"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-alternative mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-email-83"></i>
+                                </span>
+                            </div>
+                            <input asp-for="Input.Email" class="form-control" placeholder="Email" type="email" required />
+                        </div>
+                        <span asp-validation-for="Input.Email" class="invalid-feedback" style="display: block"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-lock-circle-open"></i>
+                                </span>
+                            </div>
+                            <input asp-for="Input.Password" class="form-control" placeholder="Password" type="password" required />
+                        </div>
+                        <span asp-validation-for="Input.Password" class="invalid-feedback" style="display: block"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-group input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-lock-circle-open"></i>
+                                </span>
+                            </div>
+                            <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm Password" type="password" required />
+                        </div>
+                        <span asp-validation-for="Input.ConfirmPassword" class="invalid-feedback" style="display: block"></span>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary mt-4" type="submit">Create account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-light">
+                    <small>Login instead?</small>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
 }
+
+    @section IdentityHeader
+    {
+    <div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9">
+        <div class="container">
+            <div class="header-body text-center mb-7">
+                <div class="row justify-content-center">
+                    <div class="col-xl-5 col-lg-6 col-md-8 px-5">
+                        <h1 class="text-white">Create an account for FREE!</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
+    </div>
+}
+
