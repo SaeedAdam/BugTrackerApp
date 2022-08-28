@@ -24,7 +24,7 @@
             <span>Support</span>
         </a>
         <div class="dropdown-divider"></div>
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Default", "Home", new {area = ""})">
             <button type="submit" class="dropdown-item logout">
                 <i class="ni ni-user-run"></i>
                 <span class="logout">Logout</span>

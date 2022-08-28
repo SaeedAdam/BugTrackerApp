@@ -35,6 +35,7 @@
                             <span>Anonymous User</span>
                         }
                     </span>
+                    <h6 class="text-white">@((await UserManager.GetRolesAsync(btUser)).FirstOrDefault())</h6>
                 </div>
             </div>
         </a>
