@@ -1,27 +1,25 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <partial name="_PageHeadElement"/>
+    <partial name="_PageHeadElement" />
 
     @await RenderSectionAsync("Styles", required: false)
     @await RenderSectionAsync("HeadScripts", required: false)
 </head>
 <body class="bg-default">
     <partial name="_GoogleTagManagerBodyElement" />
-
-    <div class="main-content">
-        <partial name="Auth/_Navbar"/>
-        @await RenderSectionAsync("IdentityHeader", false)
-        <!-- Page content -->
-        <div class="container mt--8 pb-5">
+        <div class="main-content">
+            <partial name="Auth/_Navbar" />
+            @await RenderSectionAsync("IdentityHeader", false)
             <!-- Page content -->
-            @RenderBody()
+            <div class="container mt--8 pb-5">
+                <!-- Page content -->
+                @RenderBody()
+            </div>
+            <partial name="Auth/_Footer" />
         </div>
-        <partial name="Auth/_Footer"/>
-    </div>
+    <partial name="_ThemeScripts" />
 
-    <partial name="_ThemeScripts"/>
-
-@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
