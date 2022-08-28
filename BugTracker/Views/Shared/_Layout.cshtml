@@ -31,17 +31,12 @@
     <partial name="Topnav/_Topnav"/>
         
     <!-- Header -->
-        <div class="header bg-gradient-default pb-6">
+    <div class="header bg-gradient-primary pb-6">
         <div class="container-fluid">
             <div class="header-body">
                 <!-- 1st Row: Crumbs and filters -->
-                <div class="row align-items-center py-4">
-                    @await RenderSectionAsync("Breadcrumbs", required: false)
-                    <div class="col-lg-6 col-5 text-right">
-                        <a href="#" class="btn btn-sm btn-neutral">New</a>
-                        <a href="#" class="btn btn-sm btn-neutral">Filters</a>
-                    </div>
-                </div>
+                @await RenderSectionAsync("Breadcrumbs", required: false)
+                    
                 @await RenderSectionAsync("DashboardCards", required: false)
             </div>
         </div>

@@ -274,14 +274,14 @@
                             <tr>
                                 <th scope="row">
                                     <div class="media align-items-center">
-                                        <a href="#" class="avatar rounded-circle mr-3">
+                                        <a asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id" class="avatar rounded-circle mr-3">
                                             @if (project.ImageFileData is not null)
                                             {
                                                 <img alt="Image placeholder" src="@ImageService.DecodeImage(project.ImageFileData, project.ImageFileContentType)">
                                             }
                                             else
                                             {
-                                                <img alt="Image placeholder" src="/img/logo.png">
+                                                <img alt="Image placeholder" class="img-fluid" src="/img/project-icon.png">
                                             }
                                         </a>
                                         <div class="media-body">
