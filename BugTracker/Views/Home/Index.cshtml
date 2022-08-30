@@ -228,11 +228,11 @@
                     <div>
                         @if (btUser?.AvatarFileData is not null)
                         {
-                            <img src="@ImageService.DecodeImage(btUser.AvatarFileData, btUser.AvatarFileContentType)" />
+                            <img class="avatar rounded-circle" src="@ImageService.DecodeImage(btUser.AvatarFileData, btUser.AvatarFileContentType)" />
                         }
                         else
                         {
-                            <img src="/img/brand/favicon.png" />
+                            <img class="avatar rounded-circle" src="/img/brand/defaultUserImage.png" />
                         }
 
                         <span style="font-weight: bold">@member.FullName</span>
@@ -337,7 +337,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <img alt="Image placeholder" src="/img/brand/favicon.png">
+                                                    <img alt="Image placeholder" src="/img/brand/defaultUserImage.png">
                                                 }
                                             </a>
                                         }
@@ -404,8 +404,9 @@
     </div>
 </div>
 
+<!-- Tickets Table -->
+
 <div class="row">
-    @* Tickets Table *@
     <div class="col">
         <div class="bg-secondary">
             <div class="card m-1 p-2">
@@ -440,7 +441,7 @@
                                             }
                                             else
                                             {
-                                                <a asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-id="@ticket.Id"><span class="badge badge-danger badge-lg">Assign Developer</span></a>
+                                                <a asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-id="@ticket.Id"><span class="btn btn-sm btn-outline-danger">Assign Developer</span></a>
                                             }
                                         </td>
                                         <td>
