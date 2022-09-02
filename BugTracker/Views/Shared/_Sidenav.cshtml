@@ -1,6 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using BugTracker.Models.Enums
 @inject SignInManager<BTUser> SignInManager
+@inject UserManager<BTUser> UserManager
+
+@{
+    string userId = UserManager.GetUserId(User);
+}
 
 <!-- Sidenav -->
 <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
@@ -75,7 +80,7 @@
                     
                     
                     <li class="nav-item">
-                        <a class="nav-link @(Context.Request.Path == "/profile" ? "active" : "")" href="@Url.Action("Profile", "Home")">
+                        <a asp-controller="Profile" asp-action="UserDetails" asp-route-id="@userId" class="nav-link">
                             <i class="ni ni-single-02 text-primary"></i> Profile
                         </a>
                     </li>

@@ -221,7 +221,7 @@
                                 <div class="card">
                                     <span class="date text-small">@history.Created.ToString("dd/MM/yyyy hh:ss tt")</span>
                                     <h6>@history.Description</h6>
-                                    <span>By: <a href="" title="@history.User.FullName">@history.User.FullName</a></span>
+                                    <span>By: <a href="" title="@history.User?.FullName">@history.User?.FullName</a></span>
                                     <div class="">
                                         <p> The ticket <b>@history.Property</b> was edited</p>
                                         <p>@($"Previous {history.Property}: {history.OldValue}")</p>

@@ -72,7 +72,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("Profile", "Home")">
+                    <a class="nav-link" href="@Url.Action("UserDetails", "Profile", new {id = SignInManager.UserManager.GetUserId(User)})">
                         <i class="ni ni-single-02 text-yellow"></i> User profile
                     </a>
                 </li>
