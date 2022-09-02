@@ -9,14 +9,14 @@
 
 <hr/>
 
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="col-md-10">
         <div class="card">
             <div class="card-header">
                 <form asp-action="AssignMembers" asp-controller="Projects" method="post">
                     <input asp-for="Project.Id" hidden=""/>
 
-                    <p>@Model.Project.Name</p>
+                    <h2>@Model.Project.Name</h2>
 
                     <p>@Model.Project.Description</p>
 

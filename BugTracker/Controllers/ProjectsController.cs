@@ -36,7 +36,7 @@ public class ProjectsController : Controller
     {
         var userId = _userManager.GetUserId(User);
 
-        var projects = await _projectService.GetUserProjectsAsync(userId);
+        List<Project> projects = await _projectService.GetUserProjectsAsync(userId);
 
         return View(projects);
     }
@@ -98,10 +98,10 @@ public class ProjectsController : Controller
         {
             await _projectService.AddProjectManagerAsync(model.PMID, model.Project.Id);
 
-            return RedirectToAction(nameof(Details), new {id = model.Project.Id});
+            return RedirectToAction(nameof(Details), new { id = model.Project.Id });
         }
 
-        return RedirectToAction(nameof(AssignPM), new {projectId = model.Project.Id});
+        return RedirectToAction(nameof(AssignPM), new { projectId = model.Project.Id });
     }
 
     [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.ProjectManager)}")]
@@ -146,10 +146,10 @@ public class ProjectsController : Controller
             foreach (var member in model.SelectedUsers)
                 await _projectService.AddUserToProjectAsync(member, model.Project.Id);
 
-            return RedirectToAction(nameof(Details), new {id = model.Project.Id});
+            return RedirectToAction(nameof(Details), new { id = model.Project.Id });
         }
 
-        return RedirectToAction(nameof(AssignMembers), new {projectId = model.Project.Id});
+        return RedirectToAction(nameof(AssignMembers), new { projectId = model.Project.Id });
     }
 
 

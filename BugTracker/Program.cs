@@ -17,7 +17,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(DataUtility.GetConnectionString(builder.Configuration),
-                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)), ServiceLifetime.Transient);
 
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

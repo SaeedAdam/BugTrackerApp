@@ -160,12 +160,6 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    [Authorize]
-    public IActionResult Profile()
-    {
-        return View();
-    }
-
     public IActionResult Icons()
     {
         return View();

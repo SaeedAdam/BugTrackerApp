@@ -69,7 +69,7 @@ else
                                         <td>
                                             @if (@project.Company?.Name is null)
                                             {
-                                                <span class="text-muted">Project hasn't been added to any company</span>
+                                                <span class="text-muted">N/A</span>
                                             }
                                             else
                                             {
@@ -97,7 +97,7 @@ else
                                         </div>
                                     </th>
                                     <td>
-                                        @project.Description.Substring(0, 75)...
+                                        @project.Description.Substring(0, 35)...
                                     </td>
                                     <td class="date">
                                         @project.StartDate.ToString("dd/MM/yyyy")
@@ -157,12 +157,20 @@ else
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center">
-                                            <span class="completion mr-2">60%</span>
-                                            <div>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                                        <div class="progress-wrapper">
+                                            <div class="progress-info">
+                                                <div class="progress-percentage">
+                                                    @{
+                                                        var start = project.StartDate.DateTime;
+                                                        var end = project.EndDate.DateTime;
+                                                        var today = DateTime.Now;
+                                                        var percent = today >= end ? 100 : today < start ? 0 : Math.Round(today.Subtract(start) / end.Subtract(start) * 100);
+                                                    }
+                                                    <span>@percent%</span>
                                                 </div>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: @percent%;"></div>
                                             </div>
                                         </div>
                                     </td>
