@@ -6290,7 +6290,7 @@ input[type='button'].btn-block
 
 .card-body
 {
-    min-height: 1px;
+    min-height: 200px;
     padding: 1.5rem; 
 
     flex: 1 1 auto;
@@ -19025,9 +19025,9 @@ a.btn-icon-only
     padding: .875rem;
 }
 
-.card-stats .card-body
-{
+.card-stats .card-body {
     padding: 1rem 1.5rem;
+    min-height: 200px;
 }
 
 .card-stats .card-status-bullet
