@@ -5762,8 +5762,8 @@ input[type='button'].btn-block
 .card-body
 {
     min-height: 1px;
-    padding: 1.25rem; 
-
+    padding: 1.25rem;
+    min-height: 200px;
     flex: 1 1 auto;
 }
 

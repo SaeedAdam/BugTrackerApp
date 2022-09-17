@@ -15,13 +15,12 @@
     var projectManager = await ProjectService.GetProjectManagerAsync(Model.Id);
 }
 
-<h1>Details</h1>
-<!---->
-<div class="row">
+@* Info Cards *@
+<div class="row mt-2">
     <div class="col-xl-6 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->
-            <div class="card-body">
+            <div class="card-body" style="height: 200px;">
 
                 <div class="row">
                     <div class="col">
@@ -60,7 +59,7 @@
     <div class="col-xl-6 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->
-            <div class="card-body">
+            <div class="card-body" style="height: 200px;">
 
                 <div class="row">
                     <div class="col">
@@ -123,105 +122,101 @@
     </div>
 </div>
 
-
-<div class="container-fluid">
-    <div class="row gy-2">
-        <div class="col-md-4 col">
-            <div class="bg-secondary">
-                <div class="card m-1 p-2">
-                    <div class="header">
-                        <h2 class="card-title text-uppercase text-muted mb-0">Project Manager</h2>
-                        <hr />
-                    </div>
-                    <div class="body" style="height: 300px; overflow-y: auto;">
-                        @if (projectManager is not null)
-                        {
-                            <div>
-                                @if (projectManager.AvatarFileData is not null)
-                                {
-                                    <img class="rounded-circle" src="@ImageService.DecodeImage(projectManager.AvatarFileData, projectManager.AvatarFileContentType)" />
-                                }
-                                else
-                                {
-                                    <img class="rounded-circle" style="height: 60px; width: 60px;" src="/img/brand/defaultUserImage.png" alt="" />
-                                }
-                                <div>
-                                    <h4>@projectManager.FullName</h4>
-                                    <h5 class="text-muted mb-0">Project Manager</h5>
-                                    <h6>@projectManager.Email</h6>
-
-                                    @if (User.IsInRole(nameof(Roles.Admin)) || btUser.Id == projectManager.Id)
-                                    {
-                                        <a class="btn btn-block btn-outline-primary" style="font-size: small" asp-action="AssignMembers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Team</a>
-                                    }
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div>
-                                <img class="rounded-circle" style="height: 60px; width: 60px;" src="/img/brand/defaultUserImage.png" alt="" />
-                                <div class="info">
-                                    <h5 class="text-muted mb-0">Not Assigned</h5>
-                                    @if (User.IsInRole(nameof(Roles.Admin)))
-                                    {
-                                        <span>
-                                            <a asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Assign PM</a>
-                                        </span>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    </div>
+@* Projects Manager - Team Members - Activity *@
+<div class="row mt-2">
+    <div class="col-md-4 col">
+        <div class="bg-secondary">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title text-uppercase text-muted mb-0">Project Manager</h2>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 col">
-            <div class="bg-secondary">
-                <div class="card m-1 p-2">
-                    <div class="header">
-                        <h2>Project Team</h2>
-                        <hr />
-                    </div>
-                    <div class="body" style="height: 300px; overflow-y: auto;">
-                        <ul class="right_chat list-unstyled mb-0">
-                            @* Logic for avatars *@
-                            @foreach (var member in await ProjectService.GetAllProjectMembersExceptPMAsync(Model.Id))
+                <div class="card-body" style="height: 300px; overflow-y: auto;">
+                    @if (projectManager is not null)
+                    {
+                        <div>
+                            @if (projectManager.AvatarFileData is not null)
                             {
-                                <li class="">
-                                    <a href="javascript:void(0)" class="text-decoration-none text-muted">
-                                        <div class="media">
-                                            @if (member.AvatarFileData is not null)
-                                            {
-                                                <img class="rounded-circle" src="@ImageService.DecodeImage(member.AvatarFileData, member.AvatarFileContentType)" />
-                                            }
-                                            else
-                                            {
-                                                <img class="rounded-circle" style="height: 60px; width: 60px;" src="/img/brand/defaultUserImage.png" />
-                                            }
-                                            <div class="">
-                                                <span class="">@member.FullName</span>
-                                                <span class="" style="font-size: small">[@((await UserManager.GetRolesAsync(member)).First())]</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
+                                <img class="rounded-circle" src="@ImageService.DecodeImage(projectManager.AvatarFileData, projectManager.AvatarFileContentType)" />
                             }
-                        </ul>
+                            else
+                            {
+                                <img class="rounded-circle" style="height: 60px; width: 60px;" src="/img/brand/defaultUserImage.png" alt="" />
+                            }
+                            <div>
+                                <h4>@projectManager.FullName</h4>
+                                <h5 class="text-muted mb-0">Project Manager</h5>
+                                <h6>@projectManager.Email</h6>
 
-                    </div>
+                                @if (User.IsInRole(nameof(Roles.Admin)) || btUser.Id == projectManager.Id)
+                                {
+                                    <a class="btn btn-block btn-outline-primary" style="font-size: small" asp-action="AssignMembers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Team</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <img class="rounded-circle" style="height: 60px; width: 60px;" src="/img/brand/defaultUserImage.png" alt="" />
+                            <div class="info">
+                                <h5 class="text-muted mb-0">Not Assigned</h5>
+                                @if (User.IsInRole(nameof(Roles.Admin)))
+                                {
+                                    <span>
+                                        <a asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Assign PM</a>
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col">
-            <div class="bg-secondary">
-                <div class="card m-1 p-2">
-                    <div class="header">
-                        <h2>Project Activity</h2>
-                        <hr />
-                    </div>
-                    <div class="bg-secondary" style="height: 300px; overflow-y: auto;">
-                        @* Project Activity loop *@
+    </div>
+    <div class="col-md-4 col">
+        <div class="bg-secondary">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Project Team</h2>
+                </div>
+                <div class="card-body" style="height: 300px; overflow-y: auto;">
+                    <ul class="list-unstyled mb-0">
+                        @* Logic for avatars *@
+                        @foreach (var member in await ProjectService.GetAllProjectMembersExceptPMAsync(Model.Id))
+                        {
+                            <li class="">
+                                <a href="javascript:void(0)" class="text-decoration-none text-muted">
+                                    <div class="media">
+                                        @if (member.AvatarFileData is not null)
+                                        {
+                                            <img class="rounded-circle" src="@ImageService.DecodeImage(member.AvatarFileData, member.AvatarFileContentType)" />
+                                        }
+                                        else
+                                        {
+                                            <img class="rounded-circle" style="height: 60px; width: 60px;" src="/img/brand/defaultUserImage.png" />
+                                        }
+                                        <div class="">
+                                            <span class="">@member.FullName</span>
+                                            <span class="" style="font-size: small">[@((await UserManager.GetRolesAsync(member)).First())]</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col">
+        <div class="bg-secondary">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Project Activity</h2>
+                </div>
+                <div class="bg-secondary">
+                    <div class="p-2" style="height: 300px; overflow-y: auto;">
                         @foreach (var history in await HistoryService.GetProjectTicketsHistoriesAsync(Model.Id, btUser.CompanyId))
                         {
                             <div class="card m-3">
@@ -232,7 +227,7 @@
                                         <span class="text-end">By: <a href="@Url.Action("UserDetails", "Profile", new {id = history.UserId})" title="@history.User.FullName">@history.User.FullName</a></span>
                                     </h5>
                                     <h4>@history.Description</h4>
-                                    <hr />
+                                    <hr/>
                                     <div class="">
                                         <p> The ticket <b>@history.Property</b> was edited</p>
                                         <h5 class="text-danger">@($"Previous {history.Property}: ")</h5>
@@ -243,121 +238,125 @@
                                 </div>
                             </div>
                         }
-                    </div>
 
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
-    @* Tickets Table *@
-    <div class="row">
-        <div class="col">
-            <div class="bg-secondary">
-                <div class="card m-1 p-2">
-                    <div class="card-header">
-                        <h2>Tickets</h2>
-                    </div>
-                    <div class="card-body">
-                        @* Copy and format table from Unassigned Tickets *@
-                        <div class="table-responsive" style="overflow-y: auto; height: 600px;">
-                            <table class="table align-items-center">
-                                <thead class="thead-light">
+</div>
+
+@* Tickets Table *@
+<div class="row mt-2">
+    <div class="col">
+        <div class="bg-secondary">
+            <div class="card m-1 p-2">
+                <div class="card-header">
+                    <h2>Tickets</h2>
+                </div>
+                <div class="card-body">
+                    @* Copy and format table from Unassigned Tickets *@
+                    <div class="table-responsive" style="overflow-y: auto; height: 600px;">
+                        <table class="table align-items-center">
+                            <thead class="thead-light">
+                                <tr>
+                                    @* Table header *@
+                                    <th scope="col" class="sort">Title</th>
+                                    <th scope="col" class="sort">Developer</th>
+                                    <th scope="col" class="sort">Status</th>
+                                    <th scope="col" class="sort">Priority</th>
+                                    <th scope="col" class="sort">Date</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @* Table body *@
+                                @foreach (var ticket in Model.Tickets.OrderByDescending(d => d.Created))
+                                {
                                     <tr>
-                                        @* Table header *@
-                                        <th scope="col" class="sort">Title</th>
-                                        <th scope="col" class="sort">Developer</th>
-                                        <th scope="col" class="sort">Status</th>
-                                        <th scope="col" class="sort">Priority</th>
-                                        <th scope="col" class="sort">Date</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @* Table body *@
-                                    @foreach (var ticket in Model.Tickets.OrderByDescending(d => d.Created))
-                                    {
-                                        <tr>
-                                            <td><a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id"><strong>@ticket.Title</strong></a> </td>
-                                            <td>
-                                                @if (ticket.DeveloperUserId is not null)
-                                                {
-                                                    @ticket.DeveloperUser.FullName
-                                                }
-                                                else
-                                                {
-                                                    <a asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-id="@ticket.Id"><span class="btn btn-sm btn-outline-danger">Assign Developer</span></a>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (ticket.TicketStatus.Name == "New")
-                                                {
-                                                    <span class="badge badge-default">@ticket.TicketStatus.Name </span>
-                                                }
-                                                @if (ticket.TicketStatus.Name == "Development")
-                                                {
-                                                    <span class="badge badge-warning">@ticket.TicketStatus.Name </span>
-                                                }
-                                                @if (ticket.TicketStatus.Name == "Testing")
-                                                {
-                                                    <span class="badge badge-info">@ticket.TicketStatus.Name </span>
-                                                }
-                                                @if (ticket.TicketStatus.Name == "Resolved")
-                                                {
-                                                    <span class="badge badge-success">@ticket.TicketStatus.Name </span>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (@ticket.TicketPriority.Name == "Low")
-                                                {
-                                                    <span class="badge badge-dot mr-4">
-                                                        <i class="bg-success"></i>
-                                                        <span class="status">@ticket.TicketPriority.Name</span>
-                                                    </span>
-                                                }
-                                                @if (@ticket.TicketPriority.Name == "Medium")
-                                                {
-                                                    <span class="badge badge-dot mr-4">
-                                                        <i class="bg-info"></i>
-                                                        <span class="status">@ticket.TicketPriority.Name</span>
-                                                    </span>
-                                                }
-                                                @if (@ticket.TicketPriority.Name == "High")
-                                                {
-                                                    <span class="badge badge-dot mr-4">
-                                                        <i class="bg-warning"></i>
-                                                        <span class="status">@ticket.TicketPriority.Name</span>
-                                                    </span>
-                                                }
-                                                @if (@ticket.TicketPriority.Name == "Urgent")
-                                                {
-                                                    <span class="badge badge-dot mr-4">
-                                                        <i class="bg-danger"></i>
-                                                        <span class="status">@ticket.TicketPriority.Name</span>
-                                                    </span>
-                                                }
-                                            </td>
-                                            <td><span style="font-size: small">@ticket.Created.ToString("dd/MM/yyyy")</span></td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" asp-action="Edit" asp-controller="Tickets" asp-route-id="@ticket.Id">Edit</a>
-                                                        <a class="dropdown-item" asp-action="Archive" asp-controller="Tickets" asp-route-id="@ticket.Id">Archive</a>
-                                                    </div>
+                                        <td><a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id"><strong>@ticket.Title</strong></a> </td>
+                                        <td>
+                                            @if (ticket.DeveloperUserId is not null)
+                                            {
+                                                @ticket.DeveloperUser.FullName
+                                            }
+                                            else if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.ProjectManager)))
+                                            {
+                                                <a asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-id="@ticket.Id"><span class="btn btn-sm btn-outline-danger">Assign Developer</span></a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-warning">Not assigned yet</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (ticket.TicketStatus.Name == "New")
+                                            {
+                                                <span class="badge badge-default">@ticket.TicketStatus.Name </span>
+                                            }
+                                            @if (ticket.TicketStatus.Name == "Development")
+                                            {
+                                                <span class="badge badge-warning">@ticket.TicketStatus.Name </span>
+                                            }
+                                            @if (ticket.TicketStatus.Name == "Testing")
+                                            {
+                                                <span class="badge badge-info">@ticket.TicketStatus.Name </span>
+                                            }
+                                            @if (ticket.TicketStatus.Name == "Resolved")
+                                            {
+                                                <span class="badge badge-success">@ticket.TicketStatus.Name </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (@ticket.TicketPriority.Name == "Low")
+                                            {
+                                                <span class="badge badge-dot mr-4">
+                                                    <span class="status">@ticket.TicketPriority.Name</span>
+                                                    <i class="bg-success"></i>
+                                                </span>
+                                            }
+                                            @if (@ticket.TicketPriority.Name == "Medium")
+                                            {
+                                                <span class="badge badge-dot mr-4">
+                                                    <span class="status">@ticket.TicketPriority.Name</span>
+                                                    <i class="bg-info"></i>
+                                                </span>
+                                            }
+                                            @if (@ticket.TicketPriority.Name == "High")
+                                            {
+                                                <span class="badge badge-dot mr-4">
+                                                    <span class="status">@ticket.TicketPriority.Name</span>
+                                                    <i class="bg-warning"></i>
+                                                </span>
+                                            }
+                                            @if (@ticket.TicketPriority.Name == "Urgent")
+                                            {
+                                                <span class="badge badge-dot mr-4">
+                                                    <span class="status">@ticket.TicketPriority.Name</span>
+                                                    <i class="bg-danger"></i>
+                                                </span>
+                                            }
+                                        </td>
+                                        <td><span style="font-size: small">@ticket.Created.ToString("dd/MM/yyyy")</span></td>
+                                        <td class="text-right">
+                                            <div class="dropdown">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" asp-action="Edit" asp-controller="Tickets" asp-route-id="@ticket.Id">Edit</a>
+                                                    <a class="dropdown-item" asp-action="Archive" asp-controller="Tickets" asp-route-id="@ticket.Id">Archive</a>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
