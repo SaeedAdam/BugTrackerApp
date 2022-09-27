@@ -14,7 +14,7 @@
 ## Demo
 Here is a working live demo :  http://cf-bugtracker.herokuapp.com/
 
-## [Usage](https://iharsh234.github.io/WebApp/) 
+## Usage
 
 ### Development
 Want to contribute? Great!
