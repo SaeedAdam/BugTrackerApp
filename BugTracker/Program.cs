@@ -28,11 +28,11 @@ public class Program
             .AddDefaultTokenProviders();
 
         // Configure Google authentication
-        builder.Services.AddAuthentication().AddGoogle(googleOptions =>
-        {
-            googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-            googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-        });
+        //builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+        //{
+        //    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        //    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+        //});
 
         // Custom Services
         builder.Services.AddScoped<IBTRolesService, BTRolesService>();
