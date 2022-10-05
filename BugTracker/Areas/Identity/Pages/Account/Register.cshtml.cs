@@ -3,9 +3,6 @@
 
 #nullable disable
 
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.Encodings.Web;
 using BugTracker.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +10,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace BugTracker.Areas.Identity.Pages.Account;
 
@@ -78,6 +78,7 @@ public class RegisterModel : PageModel
                 Email = Input.Email,
                 FirstName = Input.FirstName,
                 LastName = Input.LastName
+
             };
 
             await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -94,7 +95,7 @@ public class RegisterModel : PageModel
                 var callbackUrl = Url.Page(
                     "/Account/ConfirmEmail",
                     null,
-                    new {area = "Identity", userId, code, returnUrl},
+                    new { area = "Identity", userId, code, returnUrl },
                     Request.Scheme);
 
                 await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -102,7 +103,7 @@ public class RegisterModel : PageModel
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)
                 {
-                    return RedirectToPage("RegisterConfirmation", new {email = Input.Email, returnUrl});
+                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl });
                 }
 
                 await _signInManager.SignInAsync(user, false);
@@ -134,7 +135,7 @@ public class RegisterModel : PageModel
     {
         if (!_userManager.SupportsUserEmail)
             throw new NotSupportedException("The default UI requires a user store with email support.");
-        return (IUserEmailStore<BTUser>) _userStore;
+        return (IUserEmailStore<BTUser>)_userStore;
     }
 
     /// <summary>
