@@ -73,6 +73,13 @@
   <ItemGroup>
     <None Include="wwwroot\img\icons\common\github.svg" />
     <None Include="wwwroot\img\icons\common\google.svg" />
+    <None Include="wwwroot\img\TrackPro-logo\vector\default-monochrome-black.svg" />
+    <None Include="wwwroot\img\TrackPro-logo\vector\default-monochrome-white.svg" />
+    <None Include="wwwroot\img\TrackPro-logo\vector\default-monochrome.svg" />
+    <None Include="wwwroot\img\TrackPro-logo\vector\default.svg" />
+    <None Include="wwwroot\img\TrackPro-logo\vector\isolated-layout.svg" />
+    <None Include="wwwroot\img\TrackPro-logo\vector\isolated-monochrome-black.svg" />
+    <None Include="wwwroot\img\TrackPro-logo\vector\isolated-monochrome-white.svg" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\lib\admin-lte\dist\js\adminlte.min.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
@@ -121,13 +128,6 @@
     <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
     <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
     <None Include="wwwroot\lib\jquery\jquery.min.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="wwwroot\favicon.png">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>
