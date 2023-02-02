@@ -103,7 +103,7 @@ public class BTProjectService : IBTProjectService
 
     public async Task<List<Project>> GetUnassignedProjectsAsync(int companyId)
     {
-        List<Project> result = new();
+        var resultProjects = new List<Project>();
 
         var projects = await _context.Projects
             .Include(p => p.ProjectPriority)
@@ -112,16 +112,16 @@ public class BTProjectService : IBTProjectService
 
         foreach (var project in projects)
             if ((await GetProjectMembersByRoleAsync(project.Id, nameof(Roles.ProjectManager))).Count == 0)
-                result.Add(project);
+                resultProjects.Add(project);
 
-        return result;
+        return resultProjects;
     }
 
     public async Task<List<Project>> GetAllProjectsByCompanyAsync(int companyId)
     {
-        List<Project> projects = new();
+        var projects = new List<Project>();
 
-        projects = await _context.Projects.Where(p => p.CompanyId == companyId && p.Archived == false)
+        projects = await _context.Projects.Where(p => p.CompanyId == companyId && !p.Archived)
             .Include(p => p.Members)
             .Include(p => p.Tickets)
             .ThenInclude(t => t.Comments)
@@ -166,7 +166,7 @@ public class BTProjectService : IBTProjectService
 
     public async Task<List<Project>> GetArchivedProjectsByCompanyAsync(int companyId)
     {
-        var projects = await _context.Projects.Where(p => p.CompanyId == companyId && p.Archived == true)
+        var projects = await _context.Projects.Where(p => p.CompanyId == companyId && p.Archived)
             .Include(p => p.Members)
             .Include(p => p.Tickets)
             .ThenInclude(t => t.Comments)
@@ -214,7 +214,7 @@ public class BTProjectService : IBTProjectService
             .Include(p => p.Members)
             .FirstOrDefaultAsync(p => p.Id == projectId);
 
-        List<BTUser> members = new();
+        var members = new List<BTUser>();
 
         foreach (var user in project.Members)
             if (await _rolesService.IsUserInRoleAsync(user, role))
