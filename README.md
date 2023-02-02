@@ -11,9 +11,6 @@
 </table>
 
 
-## Demo
-Here is a working live demo :  http://cf-bugtracker.herokuapp.com/
-
 ## Usage
 
 ### Development
