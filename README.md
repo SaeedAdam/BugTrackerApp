@@ -1,5 +1,5 @@
 # [BugTrackerApp](http://cf-bugtracker.herokuapp.com)
-<img src="https://github.com/SaeedAdam/BugTrackerApp/blob/main/BugTracker/wwwroot/img/screenshots/Dashboard.jpeg" alt="Dashboard">
+<img src="https://github.com/SaeedAdam/BugTrackerApp/blob/main/wwwroot/img/screenshots/Dashboard.jpeg" alt="Dashboard">
 
 ## Description
 <table>
