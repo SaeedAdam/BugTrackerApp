@@ -4,6 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-BugTracker-39414050-2019-4F24-B535-5D479D54A57B</UserSecretsId>
+	  <BaseOutputPath>bin</BaseOutputPath>
+	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	  <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
